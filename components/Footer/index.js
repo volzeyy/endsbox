@@ -1,8 +1,14 @@
 import React from 'react'
 
+import styles from "./index.module.css"
+
 function Footer() {
   return (
-    <div>Footer</div>
+    <footer className={styles.footer}>
+      <p className={styles.footerLink}>Privacy Policy</p>
+      <p className={styles.footerLink}>©2022 eternebox</p>
+      <p className={styles.footerLink}>Terms of Use</p>
+    </footer>
   )
 }
 

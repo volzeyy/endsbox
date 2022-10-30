@@ -1,0 +1,19 @@
+.actionBar {
+    --background-color: #ECECF1;
+    --selected-background-color: #000000;
+
+    width: 100%;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.actionGroup {
+    background-color: var(--background-color);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 10px;
+}

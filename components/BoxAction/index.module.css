@@ -1,0 +1,29 @@
+.actionContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.action {
+    transition: 0.2s;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+}
+
+.default:hover {
+    transition: 0.2s;
+    border-radius: inherit;
+    color: rgb(145, 145, 145);
+    background-color: rgb(247, 247, 247);
+    cursor: pointer;
+}
+
+.active {
+    background-color: black;
+    color: white;
+}
