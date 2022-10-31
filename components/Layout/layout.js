@@ -1,13 +1,13 @@
 import NavBar from '../NavBar'
-import BoxActionBar from '../BoxActionBar'
 import Footer from '../Footer'
+
+import styles from "./index.module.css"
 
 export default function Layout({ children }) {
   return (
     <>
       <NavBar />
-      <main>{children}</main>
-      <BoxActionBar />
+      <main className={styles.main}>{children}</main>
       <Footer />
     </>
   )

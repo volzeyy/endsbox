@@ -1,0 +1,7 @@
+.boxWindow {
+    width: inherit;
+    height: inherit;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}

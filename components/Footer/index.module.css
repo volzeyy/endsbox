@@ -1,6 +1,6 @@
 .footer {
     font-size: 12px;
-    width: 100%;
+    width: inherit;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -2,7 +2,7 @@
     --background-color: #ECECF1;
     --selected-background-color: #000000;
 
-    width: 100%;
+    width: inherit;
     padding: 8px;
     display: flex;
     justify-content: center;
