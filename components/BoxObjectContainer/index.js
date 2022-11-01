@@ -1,6 +1,16 @@
 import React, { Fragment, useState } from 'react'
 
-function BoxObjectContainer({ boxPositionX, boxPositionY, boxObjects, setBoxObjects, boxObject, currentAction, boxScale, children }) {
+import MediaObject from '../MediaObject'
+
+function BoxObjectContainer({ 
+  boxPositionX, 
+  boxPositionY, 
+  boxObjects, 
+  setBoxObjects, 
+  boxObject, 
+  currentAction, 
+  boxScale 
+}) {
   
   const [isCanDrag, setIsCanDrag] = useState(false)
   const [isCanDelete, setIsCanDelete] = useState(false)
@@ -96,7 +106,13 @@ function BoxObjectContainer({ boxPositionX, boxPositionY, boxObjects, setBoxObje
           transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY}px)`,
         }}
       >
-        {children}
+        {boxObject.type === "media" ? 
+          <MediaObject 
+            mediaSrc={boxObject.src}
+          />
+        :
+          null
+        }
       </div>
       {isCanDrag ?
         <div 
@@ -109,7 +125,7 @@ function BoxObjectContainer({ boxPositionX, boxPositionY, boxObjects, setBoxObje
             width: boxObject.width * boxScale,
             height: boxObject.height * boxScale,
             backgroundColor: "rgba(0, 146, 255, 0.43)",
-            transform: `translate(${(tempObjectPositionX * boxScale) + boxPositionX}px, ${(tempObjectPositionY * boxScale) + boxPositionY + 28}px)` // 28 is the height of the navBar, yeah, I'll fix it
+            transform: `translate(${(tempObjectPositionX * boxScale) + boxPositionX}px, ${(tempObjectPositionY * boxScale) + boxPositionY}px)` //  is the height of the navBar, yeah, I'll fix it
           }}
         />
       : isCanDelete ?
@@ -122,7 +138,7 @@ function BoxObjectContainer({ boxPositionX, boxPositionY, boxObjects, setBoxObje
             width: boxObject.width * boxScale,
             height: boxObject.height * boxScale,
             backgroundColor: "rgba(255, 10, 20, 0.43)",
-            transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY + 28}px)`
+            transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY}px)`
           }}
         />
       : isCanResize ?
@@ -136,7 +152,7 @@ function BoxObjectContainer({ boxPositionX, boxPositionY, boxObjects, setBoxObje
             width: tempObjectWidth * boxScale,
             height: tempObjectHeight * boxScale,
             backgroundColor: "rgba(255, 146, 0, 0.4)",
-            transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY + 28}px)`
+            transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY}px)`
           }}
         />
       : null}

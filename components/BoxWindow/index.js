@@ -4,31 +4,9 @@ import styles from "./index.module.css"
 
 import BoxObjectContainer from "../BoxObjectContainer"
 
-function BoxWindow() {
+function BoxWindow({ currentAction, boxObjects, setBoxObjects, boxScale, boxPositionX, setBoxPositionX, boxPositionY, setBoxPositionY }) {
 
   // I only later realized that I didn't return anything from the .map function, so nothing appeared
-  const [boxObjects, setBoxObjects] = useState([
-    {
-        id: 0,
-        positionX: 3,
-        positionY: -4,
-        width: 745,
-        height: 76,
-        index: 0
-    },
-    {
-        id: 1,
-        positionX: 400,
-        positionY: -10,
-        width: 745,
-        height: 76,
-        index: 1
-    }
-  ])
-  const [boxScale, setBoxScale] = useState(0.4)
-  const [boxPositionX, setBoxPositionX] = useState(0)
-  const [boxPositionY, setBoxPositionY] = useState(0)
-  const [currentAction, setCurrentAction] = useState("resize") // for test, "pan", "select", "delete", "resize"... All work
   const [isCanDragBox, setIsCanDragBox] = useState(false)
 
   const onMouseDown = () => {
@@ -48,16 +26,13 @@ function BoxWindow() {
     setIsCanDragBox(false)
   }
 
-  // add types to the boxObjects object, like
-  // {...object, type: media} or {...object, type: text}
-  // and then render here accordingly
-
   return (
-    <div className={styles.boxWindow}
-      onMouseDown={onMouseDown}
-      onMouseMove={dragBox}
-      onMouseUp={dragBoxEnd}
-    >
+    <div className={styles.boxViewContainer}>
+      <div className={styles.boxWindow}
+        onMouseDown={onMouseDown}
+        onMouseMove={dragBox}
+        onMouseUp={dragBoxEnd}
+      >
         {boxObjects.map(boxObject => {
             return (
                 <BoxObjectContainer
@@ -69,11 +44,15 @@ function BoxWindow() {
                     boxObjects={boxObjects}
                     setBoxObjects={setBoxObjects}
                     boxObject={boxObject}
-                >
-                    <h1>Hello World!</h1>
-                </BoxObjectContainer>
+                />
             )
         })}
+      </div>
+      {currentAction === "customize-box" ?
+        <div className={styles.propertyWindow}>
+          Hello
+        </div>
+      : null}
     </div>
   )
 }

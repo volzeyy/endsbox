@@ -1,4 +1,6 @@
 .footer {
+    background-color: white;
+    z-index: 1000000;
     font-size: 12px;
     width: inherit;
     display: flex;
