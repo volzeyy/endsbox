@@ -15,10 +15,12 @@ export default function Home() {
 
   const user = useUserStore((state) => state.user)
   
-  const [boxObjects, setBoxObjects] = useState([])
-  const [boxScale, setBoxScale] = useState(0.4)
-  const [boxPositionX, setBoxPositionX] = useState(0)
-  const [boxPositionY, setBoxPositionY] = useState(0)
+  const [box, setBox] = useState({
+    owner: "",
+    objects: [],
+    scale: 0.4,
+    position: {x: 0, y: 0},
+  })
   const [currentAction, setCurrentAction] = useState("pan")
   const [isShowUserSignup, setIsShowUserSignup] = useState(false)
 
@@ -60,21 +62,15 @@ export default function Home() {
       <>
         <BoxWindow 
           currentAction={currentAction} 
-          boxObjects={boxObjects}
-          setBoxObjects={setBoxObjects}
-          boxScale={boxScale}
-          boxPositionX={boxPositionX}
-          setBoxPositionX={setBoxPositionX}
-          boxPositionY={boxPositionY}
-          setBoxPositionY={setBoxPositionY}
+          box={box}
+          setBox={setBox}
+
         />
         <BoxActionBar 
           currentAction={currentAction} 
           setCurrentAction={setCurrentAction} 
-          setBoxObjects={setBoxObjects}
-          boxPositionX={boxPositionX}
-          boxPositionY={boxPositionY}
-          setBoxScale={setBoxScale}
+          box={box}
+          setBox={setBox}
         />
       </>
       }

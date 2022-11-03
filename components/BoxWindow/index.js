@@ -4,9 +4,12 @@ import styles from "./index.module.css"
 
 import BoxObjectContainer from "../BoxObjectContainer"
 
-function BoxWindow({ currentAction, boxObjects, setBoxObjects, boxScale, boxPositionX, setBoxPositionX, boxPositionY, setBoxPositionY }) {
+function BoxWindow({ 
+  currentAction, 
+  box, 
+  setBox 
+}) {
 
-  // I only later realized that I didn't return anything from the .map function, so nothing appeared
   const [isCanDragBox, setIsCanDragBox] = useState(false)
 
   const onMouseDown = () => {
@@ -17,8 +20,14 @@ function BoxWindow({ currentAction, boxObjects, setBoxObjects, boxScale, boxPosi
 
   const dragBox = (e) => {
     if (isCanDragBox) {
-        setBoxPositionX(prev => prev += e.movementX)
-        setBoxPositionY(prev => prev += e.movementY)
+        setBox(prev => {
+          return {...prev,
+            position: {
+              x: prev.position.x += e.movementX,
+              y: prev.position.y += e.movementY,
+            },
+          }
+        })
     }
   }
 
@@ -33,18 +42,15 @@ function BoxWindow({ currentAction, boxObjects, setBoxObjects, boxScale, boxPosi
         onMouseMove={dragBox}
         onMouseUp={dragBoxEnd}
       >
-        {boxObjects.map(boxObject => {
+        {box.objects.map(boxObject => {
             return (
-                <BoxObjectContainer
-                    key={boxObject.id}
-                    boxScale={boxScale}
-                    currentAction={currentAction}
-                    boxPositionX={boxPositionX}
-                    boxPositionY={boxPositionY}
-                    boxObjects={boxObjects}
-                    setBoxObjects={setBoxObjects}
-                    boxObject={boxObject}
-                />
+              <BoxObjectContainer
+                key={boxObject.id}
+                currentAction={currentAction}
+                boxObject={boxObject}
+                box={box}
+                setBox={setBox}
+              />
             )
         })}
       </div>

@@ -20,7 +20,12 @@ import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
 
 import PaletteRoundedIcon from '@mui/icons-material/PaletteRounded';
 
-function BoxActionBar({currentAction, setCurrentAction, setBoxObjects, boxPositionX, boxPositionY, setBoxScale}) {
+function BoxActionBar({ 
+  currentAction, 
+  setCurrentAction, 
+  box,
+  setBox,
+}) {
 
   const handleMediaImport = (e) => {
     setCurrentAction("select")
@@ -36,17 +41,21 @@ function BoxActionBar({currentAction, setCurrentAction, setBoxObjects, boxPositi
       let media = new Image
       media.src = reader.result
       media.onload = () => {
-        setBoxObjects(prev => {
-          return [...prev, {
-            id: prev.length,
-            src: reader.result,
-            positionX: boxPositionX * (-1),
-            positionY: boxPositionY * (-1),
-            width: media.width,
-            height: media.height,
-            index: prev.length,
-            type: "media",
-          }]
+        setBox(prev => {
+          return {...prev,
+            objects: [...prev.objects, 
+              {
+                id: prev.objects.length,
+                src: reader.result,
+                positionX: prev.position.x,
+                positionY: prev.position.y,
+                width: media.width,
+                height: media.height,
+                index: prev.objects.length,
+                type: "media",
+              }
+            ]
+          }
         })
       }
     }
@@ -55,24 +64,32 @@ function BoxActionBar({currentAction, setCurrentAction, setBoxObjects, boxPositi
   const handleZoomIn = (e) => {
     e.preventDefault()
 
-    setBoxScale(prev => {
-      if (prev >= 1.59) {
-        return prev = 1.6
+    setBox(prev => {
+      if (prev.scale >= 1.59) {
+        return {...prev,
+          scale: 1.6,
+        }
       }
 
-      return prev += 0.2
+      return {...prev,
+        scale: prev.scale += 0.2,
+      }
     })
   }
 
   const handleZoomOut = (e) => {
     e.preventDefault()
 
-    setBoxScale(prev => {
-      if (prev <= 0.21) {
-        return prev = 0.2
+    setBox(prev => {
+      if (prev.scale <= 0.21) {
+        return {...prev, 
+          scale: 0.2
+        }
       }
 
-      return prev -= 0.2
+      return {...prev,
+        scale: prev.scale -= 0.2,
+      }
     })
   }
 

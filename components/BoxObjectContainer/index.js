@@ -3,13 +3,10 @@ import React, { Fragment, useState } from 'react'
 import MediaObject from '../MediaObject'
 
 function BoxObjectContainer({ 
-  boxPositionX, 
-  boxPositionY, 
-  boxObjects, 
-  setBoxObjects, 
-  boxObject, 
   currentAction, 
-  boxScale 
+  boxObject,
+  box,
+  setBox,
 }) {
   
   const [isCanDrag, setIsCanDrag] = useState(false)
@@ -37,16 +34,16 @@ function BoxObjectContainer({
 
   const dragObject = (e) => {
     if (isCanDrag) {
-      setTempObjectPositionX(prev => prev += Math.round(e.movementX * (1 / boxScale)))
-      setTempObjectPositionY(prev => prev += Math.round(e.movementY * (1 / boxScale)))
+      setTempObjectPositionX(prev => prev += Math.round(e.movementX * (1 / box.scale)))
+      setTempObjectPositionY(prev => prev += Math.round(e.movementY * (1 / box.scale)))
     }
   }
 
   const dragObjectEnd = () => {
     setIsCanDrag(false)
-    const newState = boxObjects.map(object => {
+    const newState = box.objects.map(object => {
       if (object.id === boxObject.id) {
-        return {...object, 
+        return {...object,
           positionX: tempObjectPositionX, 
           positionY: tempObjectPositionY
         }
@@ -54,16 +51,24 @@ function BoxObjectContainer({
       return object
     })
 
-    setBoxObjects(newState)
+    setBox(prev => {
+      return {...prev,
+        objects: newState,
+      }
+    })
   }
 
   const deleteObject = () => {
     if (currentAction === "delete") {
-        const newState = boxObjects.filter(object => {
+        const newState = box.objects.filter(object => {
             return object.id !== boxObject.id
         })
 
-        setBoxObjects(newState)
+        setBox(prev => {
+          return {...prev,
+            objects: newState,
+          }
+        })
     }
   }
 
@@ -73,15 +78,15 @@ function BoxObjectContainer({
 
   const resizeObject = (e) => {
     if (isCanResize) {
-      setTempObjectWidth(prev => prev += Math.round((e.movementX * 2) * (1 / boxScale)))
-      setTempObjectHeight(prev => prev += Math.round((e.movementY * 2) * (1 / boxScale)))
+      setTempObjectWidth(prev => prev += Math.round((e.movementX * 2) * (1 / box.scale)))
+      setTempObjectHeight(prev => prev += Math.round((e.movementY * 2) * (1 / box.scale)))
     }
   }
 
   const resizeObjectEnd = () => {
     setIsCanResize(false)
 
-    const newState = boxObjects.map(object => {
+    const newState = box.objects.map(object => {
         if (object.id === boxObject.id) {
             return {...object,
               width: tempObjectWidth,
@@ -91,7 +96,11 @@ function BoxObjectContainer({
         return object
     })
 
-    setBoxObjects(newState)
+    setBox(prev => {
+      return {...prev,
+        objects: newState,
+      }
+    })
   }
 
   return (
@@ -101,9 +110,9 @@ function BoxObjectContainer({
         style={{
           position: "absolute",
           userSelect: "none",
-          width: boxObject.width * boxScale,
-          height: boxObject.height * boxScale,
-          transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY}px)`,
+          width: boxObject.width * box.scale,
+          height: boxObject.height * box.scale,
+          transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`,
         }}
       >
         {boxObject.type === "media" ? 
@@ -121,11 +130,11 @@ function BoxObjectContainer({
           onMouseOut={dragObjectEnd}
           style={{
             position: "absolute",
-            zIndex: boxObjects.length + 1,
-            width: boxObject.width * boxScale,
-            height: boxObject.height * boxScale,
+            zIndex: box.objects.length + 1,
+            width: boxObject.width * box.scale,
+            height: boxObject.height * box.scale,
             backgroundColor: "rgba(0, 146, 255, 0.43)",
-            transform: `translate(${(tempObjectPositionX * boxScale) + boxPositionX}px, ${(tempObjectPositionY * boxScale) + boxPositionY}px)` //  is the height of the navBar, yeah, I'll fix it
+            transform: `translate(${(tempObjectPositionX * box.scale) + box.position.x}px, ${(tempObjectPositionY * box.scale) + box.position.y}px)` //  is the height of the navBar, yeah, I'll fix it
           }}
         />
       : isCanDelete ?
@@ -134,11 +143,11 @@ function BoxObjectContainer({
           onMouseOut={deleteObjectEnd}
           style={{
             position: "absolute",
-            zIndex: boxObjects.length + 1,
-            width: boxObject.width * boxScale,
-            height: boxObject.height * boxScale,
+            zIndex: box.objects.length + 1,
+            width: boxObject.width * box.scale,
+            height: boxObject.height * box.scale,
             backgroundColor: "rgba(255, 10, 20, 0.43)",
-            transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY}px)`
+            transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`
           }}
         />
       : isCanResize ?
@@ -148,11 +157,11 @@ function BoxObjectContainer({
           onMouseOut={resizeObjectEnd}
           style={{
             position: "absolute",
-            zIndex: boxObjects.length + 1,
-            width: tempObjectWidth * boxScale,
-            height: tempObjectHeight * boxScale,
+            zIndex: box.objects.length + 1,
+            width: tempObjectWidth * box.scale,
+            height: tempObjectHeight * box.scale,
             backgroundColor: "rgba(255, 146, 0, 0.4)",
-            transform: `translate(${(boxObject.positionX * boxScale) + boxPositionX}px, ${(boxObject.positionY * boxScale) + boxPositionY}px)`
+            transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`
           }}
         />
       : null}
