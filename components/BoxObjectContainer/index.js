@@ -9,43 +9,72 @@ function BoxObjectContainer({
   setBox,
 }) {
   
-  const [isCanDrag, setIsCanDrag] = useState(false)
-  const [isCanDelete, setIsCanDelete] = useState(false)
-  const [isCanResize, setIsCanResize] = useState(false)
-  const [tempObjectPositionX, setTempObjectPositionX] = useState(boxObject.positionX) // - later optimize these 2 too
-  const [tempObjectPositionY, setTempObjectPositionY] = useState(boxObject.positionY) // -
-  const [tempObjectWidth, setTempObjectWidth] = useState(boxObject.width) // - and these 2
-  const [tempObjectHeight, setTempObjectHeight] = useState(boxObject.height) // -
+  const [isAction, setIsAction] = useState({
+    drag: false,
+    delete: false,
+    resize: false,    
+  })
+
+  const [tempObject, setTempObject] = useState({
+    position: {
+      x: boxObject.positionX,
+      y: boxObject.positionY,
+    },
+    width: boxObject.width,
+    height: boxObject.height,
+  })
 
   const onMouseDown = () => {
     if (currentAction === "select") {
-      setIsCanDrag(true)
-      return
+      setIsAction(prev => {
+        return {...prev,
+          drag: true,
+        }
+      })
     }
 
     if (currentAction === "delete") {
-      setIsCanDelete(true)
+      setIsAction(prev => {
+        return {...prev,
+          delete: true,
+        }
+      })
     }
 
     if (currentAction === "resize") {
-      setIsCanResize(true)
+      setIsAction(prev => {
+        return {...prev,
+          resize: true,
+        }
+      })
     }
   }
 
   const dragObject = (e) => {
-    if (isCanDrag) {
-      setTempObjectPositionX(prev => prev += Math.round(e.movementX * (1 / box.scale)))
-      setTempObjectPositionY(prev => prev += Math.round(e.movementY * (1 / box.scale)))
+    if (isAction.drag) {
+      setTempObject(prev => {
+        return {...prev,
+          position: {
+            x: prev.position.x += Math.round(e.movementX * (1 / box.scale)),
+            y: prev.position.y += Math.round(e.movementY * (1 / box.scale)),
+          }
+        }
+      })
     }
   }
 
   const dragObjectEnd = () => {
-    setIsCanDrag(false)
+    setIsAction(prev => {
+      return {...prev,
+        drag: false,
+      }
+    })
+
     const newState = box.objects.map(object => {
       if (object.id === boxObject.id) {
         return {...object,
-          positionX: tempObjectPositionX, 
-          positionY: tempObjectPositionY
+          positionX: tempObject.position.x, 
+          positionY: tempObject.position.y
         }
       }
       return object
@@ -59,7 +88,7 @@ function BoxObjectContainer({
   }
 
   const deleteObject = () => {
-    if (currentAction === "delete") {
+    if (isAction.delete) {
         const newState = box.objects.filter(object => {
             return object.id !== boxObject.id
         })
@@ -73,24 +102,36 @@ function BoxObjectContainer({
   }
 
   const deleteObjectEnd = () => {
-    setIsCanDelete(false)
+    setIsAction(prev => {
+      return {...prev,
+        delete: false,
+      }
+    })
   }
 
   const resizeObject = (e) => {
-    if (isCanResize) {
-      setTempObjectWidth(prev => prev += Math.round((e.movementX * 2) * (1 / box.scale)))
-      setTempObjectHeight(prev => prev += Math.round((e.movementY * 2) * (1 / box.scale)))
+    if (isAction.resize) {
+      setTempObject(prev => {
+        return {...prev,
+          width: prev.width += Math.round((e.movementX * 2) * (1 / box.scale)),
+          height: prev.height += Math.round((e.movementY * 2) * (1 / box.scale))
+        }
+      })
     }
   }
 
   const resizeObjectEnd = () => {
-    setIsCanResize(false)
+    setIsAction(prev => {
+      return {...prev,
+        resize: false,
+      }
+    })
 
     const newState = box.objects.map(object => {
         if (object.id === boxObject.id) {
             return {...object,
-              width: tempObjectWidth,
-              height: tempObjectHeight,
+              width: tempObject.width,
+              height: tempObject.height,
             }
         }
         return object
@@ -123,7 +164,7 @@ function BoxObjectContainer({
           null
         }
       </div>
-      {isCanDrag ?
+      {isAction.drag ?
         <div 
           onMouseMove={dragObject}
           onMouseUp={dragObjectEnd}
@@ -134,10 +175,10 @@ function BoxObjectContainer({
             width: boxObject.width * box.scale,
             height: boxObject.height * box.scale,
             backgroundColor: "rgba(0, 146, 255, 0.43)",
-            transform: `translate(${(tempObjectPositionX * box.scale) + box.position.x}px, ${(tempObjectPositionY * box.scale) + box.position.y}px)` //  is the height of the navBar, yeah, I'll fix it
+            transform: `translate(${(tempObject.position.x * box.scale) + box.position.x}px, ${(tempObject.position.y * box.scale) + box.position.y}px)` //  is the height of the navBar, yeah, I'll fix it
           }}
         />
-      : isCanDelete ?
+      : isAction.delete ?
         <div 
           onMouseUp={deleteObject}
           onMouseOut={deleteObjectEnd}
@@ -150,7 +191,7 @@ function BoxObjectContainer({
             transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`
           }}
         />
-      : isCanResize ?
+      : isAction.resize ?
         <div 
           onMouseMove={resizeObject}
           onMouseUp={resizeObjectEnd}
@@ -158,8 +199,8 @@ function BoxObjectContainer({
           style={{
             position: "absolute",
             zIndex: box.objects.length + 1,
-            width: tempObjectWidth * box.scale,
-            height: tempObjectHeight * box.scale,
+            width: tempObject.width * box.scale,
+            height: tempObject.height * box.scale,
             backgroundColor: "rgba(255, 146, 0, 0.4)",
             transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`
           }}
