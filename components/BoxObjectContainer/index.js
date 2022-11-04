@@ -55,8 +55,8 @@ function BoxObjectContainer({
       setTempObject(prev => {
         return {...prev,
           position: {
-            x: prev.position.x += Math.round(e.movementX * (1 / box.scale)),
-            y: prev.position.y += Math.round(e.movementY * (1 / box.scale)),
+            x: prev.position.x + Math.round(e.movementX * (1 / box.scale)),
+            y: prev.position.y + Math.round(e.movementY * (1 / box.scale)),
           }
         }
       })
@@ -113,8 +113,8 @@ function BoxObjectContainer({
     if (isAction.resize) {
       setTempObject(prev => {
         return {...prev,
-          width: prev.width += Math.round((e.movementX * 2) * (1 / box.scale)),
-          height: prev.height += Math.round((e.movementY * 2) * (1 / box.scale))
+          width: prev.width + Math.round((e.movementX * 2) * (1 / box.scale)),
+          height: prev.height + Math.round((e.movementY * 2) * (1 / box.scale))
         }
       })
     }
