@@ -6,6 +6,9 @@ import styles from "./index.module.css"
 // COMPONENTS
 import BoxAction from '../BoxAction'
 
+// EXTERNAL LIBS
+import { v4 as uuid } from 'uuid';
+
 // MUI ICONS
 import PanToolAltRoundedIcon from '@mui/icons-material/PanToolAltRounded';
 import PanToolRoundedIcon from '@mui/icons-material/PanToolRounded';
@@ -45,10 +48,12 @@ function BoxActionBar({
           return {...prev,
             objects: [...prev.objects, 
               {
-                id: prev.objects.length,
+                id: uuid(),
                 src: reader.result,
-                positionX: prev.position.x,
-                positionY: prev.position.y,
+                position: {
+                  x: prev.position.x,
+                  y: prev.position.y,
+                },
                 width: media.width,
                 height: media.height,
                 index: prev.objects.length,

@@ -21,7 +21,7 @@ export default function Home() {
     scale: 0.4,
     position: {x: 0, y: 0},
   })
-  const [currentAction, setCurrentAction] = useState("pan")
+  const [currentAction, setCurrentAction] = useState("pan") // turn currentAction into a zustand store, maybe like useSandboxSelectedAction
   const [isShowUserSignup, setIsShowUserSignup] = useState(false)
 
   useEffect(() => {

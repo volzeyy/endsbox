@@ -17,8 +17,8 @@ function BoxObjectContainer({
 
   const [tempObject, setTempObject] = useState({
     position: {
-      x: boxObject.positionX,
-      y: boxObject.positionY,
+      x: boxObject.position.x,
+      y: boxObject.position.y,
     },
     width: boxObject.width,
     height: boxObject.height,
@@ -73,8 +73,10 @@ function BoxObjectContainer({
     const newState = box.objects.map(object => {
       if (object.id === boxObject.id) {
         return {...object,
-          positionX: tempObject.position.x, 
-          positionY: tempObject.position.y
+          position: {
+            x: tempObject.position.x,
+            y: tempObject.position.y,
+          }
         }
       }
       return object
@@ -153,7 +155,7 @@ function BoxObjectContainer({
           userSelect: "none",
           width: boxObject.width * box.scale,
           height: boxObject.height * box.scale,
-          transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`,
+          transform: `translate(${(boxObject.position.x * box.scale) + box.position.x}px, ${(boxObject.position.y * box.scale) + box.position.y}px)`,
         }}
       >
         {boxObject.type === "media" ? 
@@ -188,7 +190,7 @@ function BoxObjectContainer({
             width: boxObject.width * box.scale,
             height: boxObject.height * box.scale,
             backgroundColor: "rgba(255, 10, 20, 0.43)",
-            transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`
+            transform: `translate(${(boxObject.position.x * box.scale) + box.position.x}px, ${(boxObject.position.y * box.scale) + box.position.y}px)`
           }}
         />
       : isAction.resize ?
@@ -202,7 +204,7 @@ function BoxObjectContainer({
             width: tempObject.width * box.scale,
             height: tempObject.height * box.scale,
             backgroundColor: "rgba(255, 146, 0, 0.4)",
-            transform: `translate(${(boxObject.positionX * box.scale) + box.position.x}px, ${(boxObject.positionY * box.scale) + box.position.y}px)`
+            transform: `translate(${(boxObject.position.x * box.scale) + box.position.x}px, ${(boxObject.position.y * box.scale) + box.position.y}px)`
           }}
         />
       : null}
