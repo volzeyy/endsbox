@@ -6,6 +6,7 @@ import Logo from '../Logo'
 import SignInButton from '../SignInButton'
 
 import { useUserStore } from "../../stores/userStore"
+import SignOutButton from '../SignOutButton'
 
 function NavBar() {
 
@@ -15,7 +16,7 @@ function NavBar() {
     <header className={styles.navBar}>
         <Logo />
         {user ? 
-          null
+          <SignOutButton />
         :
           <SignInButton />
         }

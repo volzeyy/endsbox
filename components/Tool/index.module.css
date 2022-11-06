@@ -1,4 +1,4 @@
-.actionContainer {
+.toolContainer {
     position: relative;
     display: flex;
     justify-content: center;
@@ -6,7 +6,7 @@
     transition: 0.2s;
 }
 
-.action {
+.tool {
     position: relative;
     transition: 0.2s;
     border-radius: 5px;
@@ -16,7 +16,7 @@
     padding: 6px;
 }
 
-.actionTip {
+.toolTip {
     bottom: 50px;
     font-size: 12px;
     line-height: 3px;
@@ -43,7 +43,7 @@
     cursor: pointer;
 }
 
-.actionContainer:hover .actionTip {
+.toolContainer:hover .toolTip {
     transition: 0.5s;
     color: white;
     transition-delay: 0.3s;

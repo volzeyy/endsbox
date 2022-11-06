@@ -1,0 +1,10 @@
+.propertyBar {
+    display: grid;
+    justify-items: center;
+    grid-auto-rows: auto;
+    background-color: aqua;
+    width: auto;
+    height: 100%;
+    z-index: 9999;
+    padding: 10px;
+}

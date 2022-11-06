@@ -2,14 +2,17 @@ import React, { Fragment, useState } from 'react'
 
 import MediaObject from '../MediaObject'
 
-function BoxObjectContainer({ 
-  currentAction, 
+import { useToolStore } from "../../stores/toolStore"
+
+function ObjectContainer({ 
   boxObject,
   box,
   setBox,
 }) {
   
-  const [isAction, setIsAction] = useState({
+  const selectedTool = useToolStore((state) => state.selectedTool)
+
+  const [isToolUsed, setIsToolUsed] = useState({
     drag: false,
     delete: false,
     resize: false,    
@@ -25,24 +28,24 @@ function BoxObjectContainer({
   })
 
   const onMouseDown = () => {
-    if (currentAction === "select") {
-      setIsAction(prev => {
+    if (selectedTool === "select") {
+      setIsToolUsed(prev => {
         return {...prev,
           drag: true,
         }
       })
     }
 
-    if (currentAction === "delete") {
-      setIsAction(prev => {
+    if (selectedTool === "delete") {
+      setIsToolUsed(prev => {
         return {...prev,
           delete: true,
         }
       })
     }
 
-    if (currentAction === "resize") {
-      setIsAction(prev => {
+    if (selectedTool === "resize") {
+      setIsToolUsed(prev => {
         return {...prev,
           resize: true,
         }
@@ -51,7 +54,7 @@ function BoxObjectContainer({
   }
 
   const dragObject = (e) => {
-    if (isAction.drag) {
+    if (isToolUsed.drag) {
       setTempObject(prev => {
         return {...prev,
           position: {
@@ -64,11 +67,21 @@ function BoxObjectContainer({
   }
 
   const dragObjectEnd = () => {
-    setIsAction(prev => {
+    setIsToolUsed(prev => {
       return {...prev,
         drag: false,
       }
     })
+
+    if (tempObject.position.x === boxObject.position.x && tempObject.position.y === boxObject.position.y) {
+      setBox(prev => {
+        return {...prev,
+          selectedObjectId: boxObject.id
+        }
+      })
+
+      return
+    }
 
     const newState = box.objects.map(object => {
       if (object.id === boxObject.id) {
@@ -79,6 +92,7 @@ function BoxObjectContainer({
           }
         }
       }
+
       return object
     })
 
@@ -90,7 +104,7 @@ function BoxObjectContainer({
   }
 
   const deleteObject = () => {
-    if (isAction.delete) {
+    if (isToolUsed.delete) {
         const newState = box.objects.filter(object => {
             return object.id !== boxObject.id
         })
@@ -104,15 +118,20 @@ function BoxObjectContainer({
   }
 
   const deleteObjectEnd = () => {
-    setIsAction(prev => {
+    setIsToolUsed(prev => {
       return {...prev,
         delete: false,
+      }
+    })
+    setBox(prev => {
+      return {...prev,
+        selectedObjectId: ""
       }
     })
   }
 
   const resizeObject = (e) => {
-    if (isAction.resize) {
+    if (isToolUsed.resize) {
       setTempObject(prev => {
         return {...prev,
           width: prev.width + Math.round((e.movementX * 2) * (1 / box.scale)),
@@ -123,7 +142,7 @@ function BoxObjectContainer({
   }
 
   const resizeObjectEnd = () => {
-    setIsAction(prev => {
+    setIsToolUsed(prev => {
       return {...prev,
         resize: false,
       }
@@ -166,7 +185,7 @@ function BoxObjectContainer({
           null
         }
       </div>
-      {isAction.drag ?
+      {isToolUsed.drag ?
         <div 
           onMouseMove={dragObject}
           onMouseUp={dragObjectEnd}
@@ -180,7 +199,7 @@ function BoxObjectContainer({
             transform: `translate(${(tempObject.position.x * box.scale) + box.position.x}px, ${(tempObject.position.y * box.scale) + box.position.y}px)` //  is the height of the navBar, yeah, I'll fix it
           }}
         />
-      : isAction.delete ?
+      : isToolUsed.delete ?
         <div 
           onMouseUp={deleteObject}
           onMouseOut={deleteObjectEnd}
@@ -193,7 +212,7 @@ function BoxObjectContainer({
             transform: `translate(${(boxObject.position.x * box.scale) + box.position.x}px, ${(boxObject.position.y * box.scale) + box.position.y}px)`
           }}
         />
-      : isAction.resize ?
+      : isToolUsed.resize ?
         <div 
           onMouseMove={resizeObject}
           onMouseUp={resizeObjectEnd}
@@ -212,4 +231,4 @@ function BoxObjectContainer({
   )
 }
 
-export default BoxObjectContainer
+export default ObjectContainer

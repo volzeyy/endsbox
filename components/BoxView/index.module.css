@@ -1,21 +1,17 @@
-.boxViewContainer {
+.mainContainer {
     width: 100%;
     height: 100%;
     display: grid;
+    justify-items: center;
+    align-items: center;
     grid-template-columns: 1fr auto;
 }
 
-.boxWindow {
+.boxView {
     display: grid;
     justify-items: center;
     align-items: center;
     overflow: hidden;
-    width: 100%;
-    height: 100%;
-}
-
-.propertyWindow {
-    background-color: blue;
     width: 100%;
     height: 100%;
 }

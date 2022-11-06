@@ -4,10 +4,10 @@ import React from 'react'
 import styles from "./index.module.css"
 
 // COMPONENTS
-import BoxAction from '../BoxAction'
+import BoxAction from '../Tool'
 
 // EXTERNAL LIBS
-import { v4 as uuid } from 'uuid';
+import { v4 } from 'uuid';
 
 // MUI ICONS
 import PanToolAltRoundedIcon from '@mui/icons-material/PanToolAltRounded';
@@ -23,15 +23,12 @@ import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
 
 import PaletteRoundedIcon from '@mui/icons-material/PaletteRounded';
 
-function BoxActionBar({ 
-  currentAction, 
-  setCurrentAction, 
+function ToolBar({ 
   box,
   setBox,
 }) {
 
   const handleMediaImport = (e) => {
-    setCurrentAction("select")
     let file = e.target.files[0]
 
     if (file === null) {
@@ -44,19 +41,19 @@ function BoxActionBar({
       let media = new Image
       media.src = reader.result
       media.onload = () => {
-        setBox(prev => {
-          return {...prev,
-            objects: [...prev.objects, 
+        setBox(prevBox => {
+          return {...prevBox,
+            objects: [...prevBox.objects, 
               {
-                id: uuid(),
+                id: v4(),
                 src: reader.result,
                 position: {
-                  x: prev.position.x,
-                  y: prev.position.y,
+                  x: prevBox.position.x * (-1) * ( 1 / prevBox.scale ),
+                  y: prevBox.position.y * (-1) * ( 1 / prevBox.scale ),
                 },
                 width: media.width,
                 height: media.height,
-                index: prev.objects.length,
+                index: prevBox.objects.length,
                 type: "media",
               }
             ]
@@ -102,19 +99,15 @@ function BoxActionBar({
     <div className={styles.actionBar}>
       <div className={styles.actionGroup}>
         <BoxAction
-          actionTip="Select"
-          actionId="select"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Select"
+          toolId="select"
         >
           <PanToolAltRoundedIcon />
           <input type="button" style={{display: "none"}} id='select' />
         </BoxAction>
         <BoxAction
-          actionTip="Pan"
-          actionId="pan"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Pan"
+          toolId="pan"
         >
           <PanToolRoundedIcon />
           <input type="button" style={{display: "none"}} id='pan' />
@@ -122,10 +115,8 @@ function BoxActionBar({
       </div>
       <div className={styles.actionGroup}>
         <BoxAction
-          actionTip="Import Media"
-          actionId="import-media"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Import Media"
+          toolId="import-media"
         >
           <AddPhotoAlternateRoundedIcon />
           <input type="file" style={{display: "none"}} onChange={handleMediaImport} id='import-media' />
@@ -133,19 +124,15 @@ function BoxActionBar({
       </div>
       <div className={styles.actionGroup}>
         <BoxAction
-          actionTip="Delete an Object"
-          actionId="delete"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Delete an Object"
+          toolId="delete"
         >
           <DeleteForeverRoundedIcon />
           <input type="button" style={{display: "none"}} id='delete' />
         </BoxAction>
         <BoxAction
-          actionTip="Resize an Object"
-          actionId="resize"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Resize an Object"
+          toolId="resize"
         >
           <CropFreeRoundedIcon />
           <input type="button" style={{display: "none"}} id='resize' />
@@ -153,20 +140,16 @@ function BoxActionBar({
       </div>
       <div className={styles.actionGroup}>
         <BoxAction
-          actionTip="Zoom In"
-          actionId="zoom-in"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Zoom In"
+          toolId="zoom-in"
           onClick={handleZoomIn}
         >
           <ZoomInRoundedIcon />
           <input type="button" style={{display: "none"}} id='zoom-in' />
         </BoxAction>
         <BoxAction
-          actionTip="Zoom Out"
-          actionId="zoom-out"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Zoom Out"
+          toolId="zoom-out"
           onClick={handleZoomOut}
         >
           <ZoomOutRoundedIcon />
@@ -175,10 +158,8 @@ function BoxActionBar({
       </div>
       <div className={styles.actionGroup}>
         <BoxAction
-          actionTip="Customize this Box"
-          actionId="customize-box"
-          currentAction={currentAction}
-          setCurrentAction={setCurrentAction}
+          toolTip="Customize this Box"
+          toolId="customize-box"
         >
           <PaletteRoundedIcon />
           <input type="button" style={{display: "none"}} id='customize-box' />
@@ -188,4 +169,4 @@ function BoxActionBar({
   )
 }
 
-export default BoxActionBar
+export default ToolBar
