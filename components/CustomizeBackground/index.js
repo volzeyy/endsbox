@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import styles from "./index.module.css"
 
 function CustomizeBackground({box, setBox}) {
-  
+
   const handleBackgroundChange = (e) => {
     e.preventDefault()
 
@@ -35,7 +35,6 @@ function CustomizeBackground({box, setBox}) {
                 background: {
                     ...prev.background,
                     image: `url(${reader.result})`,
-                    position: 'center',
                 }
             }
         })
@@ -71,6 +70,34 @@ function CustomizeBackground({box, setBox}) {
             background: {
                 ...prev.background,
                 size: e.target.value,
+            }
+        }
+    })
+  }
+
+  const handleBackgroundPositionXChange = (e) => {
+    setBox(prev => {
+        return {...prev,
+            background: {
+                ...prev.background,
+                position: {
+                    ...prev.background.position,
+                    x: e.target.value
+                }
+            }
+        }
+    })
+  }
+
+  const handleBackgroundPositionYChange = (e) => {
+    setBox(prev => {
+        return {...prev,
+            background: {
+                ...prev.background,
+                position: {
+                    ...prev.background.position,
+                    y: e.target.value,
+                }
             }
         }
     })
@@ -120,6 +147,14 @@ function CustomizeBackground({box, setBox}) {
                 <option value="contain">contain</option>
                 <option value="initial">initial</option>
             </select>
+        </label>
+        <label htmlFor="set-background-position-x" className={styles.input}>
+            Position X
+            <input id="set-background-position-x" type="number" name="background-position-x" value={box.background.position.x} onChange={handleBackgroundPositionXChange} />
+        </label>
+        <label htmlFor="set-background-position-y" className={styles.input}>
+            Position Y
+            <input id="set-background-position-y" type="number" name="background-position-y" value={box.background.position.y} onChange={handleBackgroundPositionYChange} />
         </label>
     </>
   )

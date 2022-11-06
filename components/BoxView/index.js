@@ -22,6 +22,9 @@ function BoxView({
     document.body.style.backgroundRepeat = box.background.repeat
     document.body.style.backgroundBlendMode = box.background.blendMode
     document.body.style.backgroundSize = box.background.size
+    document.body.style.backgroundPosition = "center"
+    document.body.style.backgroundPositionX = `${box.background.position.x}px`
+    document.body.style.backgroundPositionY = `${box.background.position.y}px`
   }, [box.background])
 
   const onMouseDown = () => {
