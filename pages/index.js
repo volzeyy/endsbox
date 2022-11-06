@@ -16,6 +16,7 @@ export default function Home() {
   
   const [box, setBox] = useState({
     owner: "",
+    background: "white",
     objects: [],
     scale: 0.4,
     position: {x: 0, y: 0},

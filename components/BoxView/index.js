@@ -16,6 +16,14 @@ function BoxView({
 
   const [isCanDragBox, setIsCanDragBox] = useState(false)
 
+  useEffect(() => {
+    document.body.style.backgroundImage = box.background.image
+    document.body.style.backgroundColor = box.background.color
+    document.body.style.backgroundRepeat = box.background.repeat
+    document.body.style.backgroundBlendMode = box.background.blendMode
+    document.body.style.backgroundSize = box.background.size
+  }, [box.background])
+
   const onMouseDown = () => {
     if (selectedTool == "pan") {
         setIsCanDragBox(true)
@@ -59,17 +67,10 @@ function BoxView({
       >
         {boxObjects}
       </div>
-      {selectedTool === "customize-box" ?
-        <PropertyBar>
-          <div>Hello</div>
-          <div>Hello</div>
-          <div>Hello</div>
-          <div>Hello</div>
-          <div>Hello</div>
-          <div>Hello</div>
-          <div>Hello</div>
-        </PropertyBar>
-      : null}
+      <PropertyBar 
+        box={box}
+        setBox={setBox}
+      />
     </div>
   )
 }
