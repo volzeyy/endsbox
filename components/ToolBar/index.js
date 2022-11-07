@@ -67,14 +67,14 @@ function ToolBar({
     e.preventDefault()
 
     setBox(prev => {
-      if (prev.scale >= 1.59) {
+      if (prev.scale >= 0.99) {
         return {...prev,
-          scale: 1.6,
+          scale: 1,
         }
       }
 
       return {...prev,
-        scale: prev.scale += 0.2,
+        scale: prev.scale + 0.05,
       }
     })
   }
@@ -83,14 +83,14 @@ function ToolBar({
     e.preventDefault()
 
     setBox(prev => {
-      if (prev.scale <= 0.21) {
+      if (prev.scale <= 0.051) {
         return {...prev, 
-          scale: 0.2
+          scale: 0.05
         }
       }
 
       return {...prev,
-        scale: prev.scale -= 0.2,
+        scale: prev.scale - 0.05,
       }
     })
   }

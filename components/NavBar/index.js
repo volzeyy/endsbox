@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 import styles from "./index.module.css"
 
@@ -9,13 +9,18 @@ import { useUserStore } from "../../stores/userStore"
 import SignOutButton from '../SignOutButton'
 
 function NavBar() {
+  const [isUser, setIsUser] = useState({})
 
   const user = useUserStore((state) => state.user)
+
+  useEffect(() => {
+    setIsUser(user)
+  }, [user])
 
   return (
     <header className={styles.navBar}>
         <Logo />
-        {user ? 
+        {isUser ?
           <SignOutButton />
         :
           <SignInButton />

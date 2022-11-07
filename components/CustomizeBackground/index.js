@@ -107,7 +107,7 @@ function CustomizeBackground({box, setBox}) {
     <>
         <label htmlFor="set-background-color" className={styles.input} onChange={handleBackgroundChange}>
             Change Background Color
-            <input type="color" id="set-background-color"></input>
+            <input type="color" id="set-background-color" value={box.background.color}></input>
         </label>
         <label htmlFor="set-background-image" className={styles.input}>
             Upload Background Image
@@ -115,7 +115,7 @@ function CustomizeBackground({box, setBox}) {
         </label>
         <label htmlFor="set-background-repeat" className={styles.input}>
             Background Repeat
-            <select id="set-background-repeat" onChange={handleRepeatChange}>
+            <select id="set-background-repeat" value={box.background.repeat} onChange={handleRepeatChange}>
                 <option value="repeat">repeat</option>
                 <option value="repeat-x">repeat x</option>
                 <option value="repeat-y">repeat y</option>
@@ -126,7 +126,7 @@ function CustomizeBackground({box, setBox}) {
         </label>
         <label htmlFor="set-background-blend-mode" className={styles.input}>
             Background Blend Mode
-            <select id="set-background-blend-mode" onChange={handleBlendModeChange}>
+            <select id="set-background-blend-mode" value={box.background.blendMode} onChange={handleBlendModeChange}>
                 <option value="normal">normal</option>
                 <option value="multiply">multiply</option>
                 <option value="screen">screen</option>
@@ -141,7 +141,7 @@ function CustomizeBackground({box, setBox}) {
         </label>
         <label htmlFor="set-background-size" className={styles.input}>
             Background Size
-            <select id="set-background-size" onChange={handleBackgroundSizeChange}>
+            <select id="set-background-size" value={box.background.size} onChange={handleBackgroundSizeChange}>
                 <option value="auto">auto</option>
                 <option value="cover">cover</option>
                 <option value="contain">contain</option>
