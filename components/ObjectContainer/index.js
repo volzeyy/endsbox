@@ -170,6 +170,7 @@ function ObjectContainer({
       <div
         onMouseDown={onMouseDown}
         style={{
+          outline: `${boxObject.id === box.selectedObjectId ? "2px dotted blue" : ''}`,
           position: "absolute",
           userSelect: "none",
           width: boxObject.width * box.scale,

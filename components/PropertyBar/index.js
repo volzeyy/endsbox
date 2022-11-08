@@ -15,7 +15,7 @@ function PropertyBar({box, setBox}) {
             <CustomizeBackground 
                 box={box}
                 setBox={setBox}
-            />  
+            />
         : null}
     </div>
   )

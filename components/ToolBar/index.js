@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 //STYLES
 import styles from "./index.module.css"
@@ -21,12 +21,29 @@ import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateR
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
 
+import VerticalAlignBottomRoundedIcon from '@mui/icons-material/VerticalAlignBottomRounded';
+import VerticalAlignTopRoundedIcon from '@mui/icons-material/VerticalAlignTopRounded';
+
 import PaletteRoundedIcon from '@mui/icons-material/PaletteRounded';
+
+// other
+
+import { useToolStore } from '../../stores/toolStore';
 
 function ToolBar({ 
   box,
   setBox,
 }) {
+
+  const selectedTool = useToolStore((state) => state.selectedTool)
+
+  useEffect(() => {
+    setBox(prev => {
+      return {...prev,
+        selectedObjectId: ""
+      }
+    })
+  }, [selectedTool])
 
   const handleMediaImport = (e) => {
     let file = e.target.files[0]
@@ -95,8 +112,21 @@ function ToolBar({
     })
   }
 
+  const handleSortToTheBottom = (e) => {
+    e.preventDefault()
+
+
+  }
+
+  const handleSortToTheTop = (e) => {
+    e.preventDefault()
+
+    
+  }
+
   return (
     <div className={styles.actionBar}>
+
       <div className={styles.actionGroup}>
         <BoxAction
           toolTip="Select"
@@ -113,6 +143,7 @@ function ToolBar({
           <input type="button" style={{display: "none"}} id='pan' />
         </BoxAction>
       </div>
+
       <div className={styles.actionGroup}>
         <BoxAction
           toolTip="Import Media"
@@ -122,6 +153,7 @@ function ToolBar({
           <input type="file" style={{display: "none"}} onChange={handleMediaImport} id='import-media' />
         </BoxAction>
       </div>
+
       <div className={styles.actionGroup}>
         <BoxAction
           toolTip="Delete an Object"
@@ -138,6 +170,7 @@ function ToolBar({
           <input type="button" style={{display: "none"}} id='resize' />
         </BoxAction>
       </div>
+
       <div className={styles.actionGroup}>
         <BoxAction
           toolTip="Zoom In"
@@ -156,6 +189,28 @@ function ToolBar({
           <input type="button" style={{display: "none"}} id='zoom-out' />
         </BoxAction>
       </div>
+
+      {box.selectedObjectId ? 
+        <div className={styles.actionGroup}>
+          <BoxAction
+            toolTip="Move Object to the Bottom"
+            toolId="sort-bottom"
+            onClick={handleSortToTheBottom}
+          >
+            <VerticalAlignBottomRoundedIcon />
+            <input type="button" style={{display: "none"}} id='sort-bottom' />
+          </BoxAction>
+          <BoxAction
+            toolTip="Move Object to the Top"
+            toolId="sort-top"
+            onClick={handleSortToTheTop}
+          >
+            <VerticalAlignTopRoundedIcon />
+            <input type="button" style={{display: "none"}} id='sort-top' />
+          </BoxAction>
+        </div>
+      : null}
+
       <div className={styles.actionGroup}>
         <BoxAction
           toolTip="Customize this Box"
@@ -165,6 +220,7 @@ function ToolBar({
           <input type="button" style={{display: "none"}} id='customize-box' />
         </BoxAction>
       </div>
+
     </div>
   )
 }
