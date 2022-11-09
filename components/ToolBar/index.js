@@ -17,6 +17,7 @@ import ZoomInRoundedIcon from '@mui/icons-material/ZoomInRounded';
 import ZoomOutRoundedIcon from '@mui/icons-material/ZoomOutRounded';
 
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
+import TitleRoundedIcon from '@mui/icons-material/TitleRounded';
 
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
@@ -78,6 +79,25 @@ function ToolBar({
         })
       }
     }
+  }
+
+  const handleAddText = () => {
+    setBox(prevBox => {
+      return {...prevBox,
+        objects: [...prevBox.objects, 
+          {
+            id: v4(),
+            text: "Placeholder",
+            position: {
+              x: prevBox.position.x * (-1) * ( 1 / prevBox.scale ),
+              y: prevBox.position.y * (-1) * ( 1 / prevBox.scale ),
+            },
+            index: prevBox.objects.length,
+            type: "text",
+          }
+        ]
+      }
+    })
   }
 
   const handleZoomIn = (e) => {
@@ -151,6 +171,13 @@ function ToolBar({
         >
           <AddPhotoAlternateRoundedIcon />
           <input type="file" style={{display: "none"}} onChange={handleMediaImport} id='import-media' />
+        </BoxAction>
+        <BoxAction
+          toolTip="Add Text"
+          toolId="add-text"
+        >
+          <TitleRoundedIcon />
+          <input type="button" style={{display: "none"}} onClick={handleAddText} id='import-media' />
         </BoxAction>
       </div>
 

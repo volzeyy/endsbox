@@ -3,6 +3,7 @@ import React, { Fragment, useState } from 'react'
 import MediaObject from '../MediaObject'
 
 import { useToolStore } from "../../stores/toolStore"
+import TextObject from '../TextObject'
 
 function ObjectContainer({ 
   boxObject,
@@ -182,9 +183,11 @@ function ObjectContainer({
           <MediaObject 
             mediaSrc={boxObject.src}
           />
-        :
-          null
-        }
+        : boxObject.type === "text" ?
+          <TextObject 
+            text={boxObject.text}
+          />
+        : null}
       </div>
       {isToolUsed.drag ?
         <div 
