@@ -16,6 +16,8 @@ function PropertyBar({box, setBox}) {
                 box={box}
                 setBox={setBox}
             />
+        : selectedTool === "add-text" ? 
+          <h1>Hmm</h1>
         : null}
     </div>
   )

@@ -177,7 +177,7 @@ function ToolBar({
           toolId="add-text"
         >
           <TitleRoundedIcon />
-          <input type="button" style={{display: "none"}} onClick={handleAddText} id='import-media' />
+          <input type="button" style={{display: "none"}} onClick={handleAddText} id='add-text' />
         </BoxAction>
       </div>
 

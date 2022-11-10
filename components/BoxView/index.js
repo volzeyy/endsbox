@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 
 import styles from "./index.module.css"
 
-import ObjectContainer from '../ObjectContainer'
+import PropertyBar from '../PropertyBar'
+import MediaObject from '../MediaObject'
+import TextObject from '../TextObject'
 
 import { useToolStore } from "../../stores/toolStore"
-import PropertyBar from '../PropertyBar'
 
 function BoxView({ 
   box, 
@@ -51,14 +52,27 @@ function BoxView({
   }
 
   const boxObjects = box.objects.map(object => {
-    return (
-      <ObjectContainer 
-        key={object.id}
-        boxObject={object}
-        box={box}
-        setBox={setBox}
-      />
-    )
+      if (object.type === "media") {
+        return (
+          <MediaObject 
+            key={object.id}
+            boxObject={object}
+            box={box}
+            setBox={setBox}
+          />
+        )
+      }
+
+      if (object.type === "text") {
+        return (
+          <TextObject 
+            key={object.id}
+            boxObject={object}
+            box={box}
+            setBox={setBox}
+          />
+        )
+      }
   })
 
   return (
