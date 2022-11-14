@@ -151,6 +151,7 @@ function TextObject({
           position: "absolute",
           userSelect: "none",
           transform: `translate(${(boxObject.position.x * box.scale) + box.position.x}px, ${(boxObject.position.y * box.scale) + box.position.y}px)`,
+          fontSize: `${boxObject.fontSize * box.scale}px`
         }}
       >
         <h1>Text</h1>

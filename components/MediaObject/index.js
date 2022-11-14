@@ -2,6 +2,8 @@ import React, { Fragment, useState } from 'react'
 
 import { useToolStore } from "../../stores/toolStore"
 
+import styles from "./index.module.css"
+
 function MediaObject({ 
   boxObject,
   box,

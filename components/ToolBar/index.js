@@ -92,6 +92,7 @@ function ToolBar({
               x: prevBox.position.x * (-1) * ( 1 / prevBox.scale ),
               y: prevBox.position.y * (-1) * ( 1 / prevBox.scale ),
             },
+            fontSize: 16,
             index: prevBox.objects.length,
             type: "text",
           }
