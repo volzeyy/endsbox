@@ -8,7 +8,6 @@ export default function Layout({ children }) {
     <>
       <NavBar />
       <main className={styles.main}>{children}</main>
-      <Footer />
     </>
   )
 }
