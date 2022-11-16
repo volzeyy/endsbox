@@ -4,6 +4,7 @@ import styles from "./index.module.css"
 
 import { useToolStore } from "../../stores/toolStore"
 import CustomizeBackground from '../CustomizeBackground'
+import CustomizeText from '../CustomizeText'
 
 function PropertyBar({box, setBox}) {
 
@@ -17,7 +18,10 @@ function PropertyBar({box, setBox}) {
                 setBox={setBox}
             />
         : selectedTool === "add-text" ? 
-          <h1>Hmm</h1>
+          <CustomizeText 
+            box={box}
+            setBox={setBox}
+          />
         : null}
     </div>
   )

@@ -154,7 +154,7 @@ function TextObject({
           fontSize: `${boxObject.fontSize * box.scale}px`
         }}
       >
-        <h1>Text</h1>
+        <h1>{boxObject.text}</h1>
       </div>
       {isToolUsed.drag ?
         <div 
