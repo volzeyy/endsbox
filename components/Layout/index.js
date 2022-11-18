@@ -1,13 +1,3 @@
-import NavBar from "../NavBar";
-import Footer from "../Footer";
+import { StyledLayout as Layout } from "./Layout.style"
 
-import styles from "./index.module.css";
-
-export default function Layout({ children }) {
-  return (
-    <>
-      <NavBar />
-      <main className={styles.main}>{children}</main>
-    </>
-  );
-}
+export default Layout

@@ -1,4 +1,7 @@
-.navBar {
+import styled from "styled-components";
+import NavBar from "./NavBar"
+
+export const StyledNavBar = styled(NavBar)`
     z-index: 1000000;
     color: black;
     width: inherit;
@@ -9,4 +12,4 @@
     align-items: center;
     grid-template-columns: auto auto;
     justify-content: space-between;
-}
+`
