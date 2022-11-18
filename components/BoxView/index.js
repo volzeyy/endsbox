@@ -1,89 +1,87 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
-import styles from "./index.module.css"
+import styles from "./index.module.css";
 
-import PropertyBar from '../PropertyBar'
-import MediaObject from '../MediaObject'
-import TextObject from '../TextObject'
+import PropertyBar from "../PropertyBar";
+import MediaObject from "../MediaObject";
+import TextObject from "../TextObject";
 
-import { useToolStore } from "../../stores/toolStore"
+import { useToolStore } from "../../stores/toolStore";
 
-function BoxView({ 
-  box, 
-  setBox 
-}) {
+function BoxView({ box, setBox }) {
+  const selectedTool = useToolStore((state) => state.selectedTool);
 
-  const selectedTool = useToolStore((state) => state.selectedTool)
-
-  const [isCanDragBox, setIsCanDragBox] = useState(false)
+  const [isCanDragBox, setIsCanDragBox] = useState(false);
 
   useEffect(() => {
-    document.body.style.backgroundImage = box.background.image
-    document.body.style.backgroundColor = box.background.color
-    document.body.style.backgroundRepeat = box.background.repeat
-    document.body.style.backgroundBlendMode = box.background.blendMode
-    document.body.style.backgroundSize = box.background.size
-    document.body.style.backgroundPosition = "center"
-    document.body.style.backgroundPositionX = `${box.background.position.x}px`
-    document.body.style.backgroundPositionY = `${box.background.position.y}px`
-  }, [box.background])
+    document.body.style.backgroundImage = box.background.image;
+    document.body.style.backgroundColor = box.background.color;
+    document.body.style.backgroundRepeat = box.background.repeat;
+    document.body.style.backgroundBlendMode = box.background.blendMode;
+    document.body.style.backgroundSize = box.background.size;
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundPositionX = `${box.background.position.x}px`;
+    document.body.style.backgroundPositionY = `${box.background.position.y}px`;
+  }, [box.background]);
 
   const onMouseDown = () => {
     if (selectedTool == "pan") {
-        setIsCanDragBox(true)
+      setIsCanDragBox(true);
     }
-  }
+  };
 
   const dragBox = (e) => {
     if (isCanDragBox) {
-        setBox(prevBox => {
-          return {...prevBox,
-            position: {
-              x: prevBox.position.x + e.movementX,
-              y: prevBox.position.y + e.movementY,
-            },
-          }
-        })
+      setBox((prevBox) => {
+        return {
+          ...prevBox,
+          position: {
+            x: prevBox.position.x + e.movementX,
+            y: prevBox.position.y + e.movementY,
+          },
+        };
+      });
     }
-  }
+  };
 
   const dragBoxEnd = () => {
-    setIsCanDragBox(false)
-  }
+    setIsCanDragBox(false);
+  };
 
-  const boxObjects = box.objects.map(object => {
-      if (object.type === "media") {
-        return (
-          <MediaObject 
-            key={object.id}
-            boxObject={object}
-            box={box}
-            setBox={setBox}
-          />
-        )
-      }
+  const boxObjects = box.objects.map((object) => {
+    if (object.type === "media") {
+      return (
+        <MediaObject
+          key={object.id}
+          boxObject={object}
+          box={box}
+          setBox={setBox}
+        />
+      );
+    }
 
-      if (object.type === "text") {
-        return (
-          <TextObject 
-            key={object.id}
-            boxObject={object}
-            box={box}
-            setBox={setBox}
-          />
-        )
-      }
-  })
+    if (object.type === "text") {
+      return (
+        <TextObject
+          key={object.id}
+          boxObject={object}
+          box={box}
+          setBox={setBox}
+        />
+      );
+    }
+  });
 
   return (
-      <div className={styles.boxView}
-          onMouseDown={onMouseDown}
-          onMouseMove={dragBox}
-          onMouseUp={dragBoxEnd}
-      >
-        {boxObjects}
-      </div>
-  )
+    <div
+      className={styles.boxView}
+      onMouseDown={onMouseDown}
+      onMouseMove={dragBox}
+      onMouseUp={dragBoxEnd}
+    >
+      {boxObjects}
+    </div>
+  );
 }
 
-export default BoxView
+export default BoxView;

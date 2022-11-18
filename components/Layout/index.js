@@ -1,7 +1,7 @@
-import NavBar from '../NavBar'
-import Footer from '../Footer'
+import NavBar from "../NavBar";
+import Footer from "../Footer";
 
-import styles from "./index.module.css"
+import styles from "./index.module.css";
 
 export default function Layout({ children }) {
   return (
@@ -9,5 +9,5 @@ export default function Layout({ children }) {
       <NavBar />
       <main className={styles.main}>{children}</main>
     </>
-  )
+  );
 }

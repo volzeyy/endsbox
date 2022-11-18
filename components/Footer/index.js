@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-import styles from "./index.module.css"
+import styles from "./index.module.css";
 
 function Footer() {
   return (
@@ -9,7 +9,7 @@ function Footer() {
       <p className={styles.footerLink}>©2022 eternebox</p>
       <p className={styles.footerLink}>Terms of Use</p>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;
