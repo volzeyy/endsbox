@@ -76,7 +76,6 @@ function BoxView({
   })
 
   return (
-    <div className={styles.mainContainer}>
       <div className={styles.boxView}
           onMouseDown={onMouseDown}
           onMouseMove={dragBox}
@@ -84,11 +83,6 @@ function BoxView({
       >
         {boxObjects}
       </div>
-      <PropertyBar 
-        box={box}
-        setBox={setBox}
-      />
-    </div>
   )
 }
 

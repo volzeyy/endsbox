@@ -7,6 +7,7 @@ import { db } from "../firebase"
 
 import UserSignupForm from "../components/UserSignupForm"
 import BoxView from "../components/BoxView"
+import PropertyBar from "../components/PropertyBar"
 import ToolBar from "../components/ToolBar"
 
 import { useUserStore } from "../stores/userStore"
@@ -66,6 +67,10 @@ export default function Home() {
       :
       <>
         <BoxView 
+          box={box}
+          setBox={setBox}
+        />
+        <PropertyBar 
           box={box}
           setBox={setBox}
         />
