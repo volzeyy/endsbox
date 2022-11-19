@@ -1,4 +1,7 @@
-.propertyBar {
+import styled from "styled-components";
+import PropertyBar from "./PropertyBar";
+
+export const StyledPropertyBar = styled(PropertyBar)`
     padding: 4px 20px;
     overflow: auto;
     display: flex;
@@ -10,4 +13,4 @@
     width: 100%;
     height: 100%;
     z-index: 9999;
-}
+`

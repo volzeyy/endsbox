@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import MediaObject from "../MediaObject";
-import TextObject from "../TextObject";
+import BoxObject from "../BoxObject";
 
 import { useToolStore } from "../../stores/toolStore";
 
@@ -46,27 +45,14 @@ function BoxView({ className, box, setBox }) {
   };
 
   const boxObjects = box.objects.map((object) => {
-    if (object.type === "media") {
-      return (
-        <MediaObject
+    return (
+      <BoxObject
           key={object.id}
           boxObject={object}
           box={box}
           setBox={setBox}
         />
-      );
-    }
-
-    if (object.type === "text") {
-      return (
-        <TextObject
-          key={object.id}
-          boxObject={object}
-          box={box}
-          setBox={setBox}
-        />
-      );
-    }
+    )
   });
 
   return (
