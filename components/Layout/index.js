@@ -1,3 +1,3 @@
-import { StyledLayout as Layout } from "./Layout.style"
+import Layout from "./Layout"
 
-export default Layout
+export default Layout;

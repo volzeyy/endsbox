@@ -87,7 +87,7 @@ function ToolBar({ className, box, setBox }) {
               x: prevBox.position.x * -1 * (1 / prevBox.scale),
               y: prevBox.position.y * -1 * (1 / prevBox.scale),
             },
-            fontSize: 16,
+            fontSize: 16 * (1 / box.scale),
             index: prevBox.objects.length,
             type: "text",
           },

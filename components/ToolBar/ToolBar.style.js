@@ -11,7 +11,6 @@ export const StyledToolBar = styled(ToolBar)`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 1px rgb(227, 227, 227) solid;   
 
     & .action-group {
         background-color: var(--background-color);
@@ -19,6 +18,6 @@ export const StyledToolBar = styled(ToolBar)`
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0px 10px;
+        margin: 0px 6px;
     }
 `

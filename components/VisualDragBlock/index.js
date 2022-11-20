@@ -23,7 +23,7 @@ const VisualDragBlock = ({ box, setBox, boxObject, tempObject, setTempObject, se
       tempObject.position.y === boxObject.position.y
     ) {
       setBox((prev) => {
-        return { ...prev, selectedObjectId: boxObject.id };
+        return { ...prev, selectedObjectId: boxObject.id === prev.selectedObjectId ? "" : boxObject.id };
       });
 
       return;

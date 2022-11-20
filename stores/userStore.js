@@ -9,7 +9,7 @@ export const useUserStore = create(
       logInUser: (loggedInUser) => set((state) => ({ user: loggedInUser })),
       signOutUser: () => set({ user: null }),
       setUsername: (usersUsername) =>
-        set((state) => ({ user: { ...state, username: usersUsername } })),
+        set((state) => ({ user: {...state.user, username: usersUsername }})),
     }),
     {
       name: "current-user-storage",
