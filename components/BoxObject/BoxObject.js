@@ -2,8 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 
 import { useToolStore } from "../../stores/toolStore";
 
-import Image from "next/image";
-
 import VisualDragBlock from "../VisualDragBlock";
 import VisualDeleteBlock from "../VisualDeleteBlock";
 import VisualResizeBlock from "../VisualResizeBlock";
@@ -79,50 +77,49 @@ function BoxObject({ boxObject, box, setBox }) {
 
   return (
     <Fragment>
-      {boxObject.type === "media" ? (
-        <img
-          onMouseDown={onMouseDown}
-          id={boxObject.id}
-          draggable='false'
-          userselect='none'
-          src={boxObject.src}
-          alt='image'
-          style={{
-            outline: `${
-              boxObject.id === box.selectedObjectId ? "2px dotted blue" : ""
-            }`,
-            position: "absolute",
-            userSelect: "none",
-            width: boxObject.width * box.scale,
-            height: boxObject.height * box.scale,
-            transform: `translate(${
-              boxObject.position.x * box.scale + box.position.x
-            }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
-          }}
-        />
-      ) : boxObject.type === "text" ? (
-        <p
-          onMouseDown={onMouseDown}
-          id={boxObject.id}
-          draggable='false'
-          userselect='none'
-          style={{
-            fontSize: boxObject.fontSize * box.scale,
-            outline: `${
-              boxObject.id === box.selectedObjectId ? "2px dotted blue" : ""
-            }`,
-            position: "absolute",
-            userSelect: "none",
-            width: boxObject.width * box.scale,
-            height: boxObject.height * box.scale,
-            transform: `translate(${
-              boxObject.position.x * box.scale + box.position.x
-            }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
-          }}
-        >
-          {boxObject.text}
-        </p>
-      ) : null}
+      <div
+        onMouseDown={onMouseDown}
+        id={boxObject.id}
+        draggable='false'
+        userselect='none'
+        style={{
+          position: "absolute",
+          outline: `${
+            boxObject.id === box.selectedObjectId ? "2px dotted blue" : ""
+          }`,
+          transform: `translate(${
+            boxObject.position.x * box.scale + box.position.x
+          }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
+          width: `${boxObject.width && boxObject.width * box.scale}px`,
+          height: `${boxObject.height && boxObject.height * box.scale}px`,
+        }}
+      >
+        {boxObject.type === "media" ? (
+          <img
+            draggable='false'
+            src={boxObject.src}
+            alt='image'
+            width='100%'
+            height='100%'
+            style={{
+              userSelect: "none",
+            }}
+          />
+        ) : boxObject.type === "text" ? (
+          <p
+            draggable='false'
+            style={{
+              margin: 0,
+              fontSize: boxObject.fontSize * box.scale,
+              userSelect: "none",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {boxObject.text}
+          </p>
+        ) : null}
+      </div>
       {isToolUsed.drag ? (
         <VisualDragBlock
           box={box}

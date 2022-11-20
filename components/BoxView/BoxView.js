@@ -20,10 +20,22 @@ function BoxView({ className, box, setBox }) {
     document.body.style.backgroundPositionY = `${box.background.position.y}px`;
   }, [box.background]);
 
-  const onMouseDown = () => {
+  const onMouseDown = (e) => {
     if (selectedTool == "pan") {
       setIsCanDragBox(true);
+      return;
     }
+    
+    if (e.target.offsetParent.id) {
+      return;
+    }
+
+    setBox((prev) => {
+      return {
+        ...prev,
+        selectedObjectId: "",
+      }
+    })
   };
 
   const dragBox = (e) => {
