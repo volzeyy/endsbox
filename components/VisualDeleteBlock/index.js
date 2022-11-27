@@ -1,10 +1,46 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { getStorage, ref, deleteObject } from "firebase/storage";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db, storage } from "../../firebase";
 
-const VisualDeleteBlock = ({ box, setBox, boxObject, setIsToolUsed }) => {
-  const deleteObject = () => {
+const VisualDeleteBlock = ({
+  box,
+  setBox,
+  boxObject,
+  setIsToolUsed,
+  isSandbox,
+}) => {
+  const router = useRouter();
+  const { boxId } = router.query;
+
+  const deleteBoxObject = () => {
     const newState = box.objects.filter((object) => {
       return object.id !== boxObject.id;
     });
+
+    if (!isSandbox) {
+      console.log("deleteeeeeeeeeee objecttttttttttttttttt");
+      const deleteObjectFirebase = async () => {
+        try {
+          await deleteDoc(doc(db, "objects", boxObject.id));
+          const objectRef = ref(storage, `${boxId}/${boxObject.id}`);
+          deleteObject(objectRef).then(() => {
+            setBox((prev) => {
+              return { ...prev, objects: newState };
+            });
+          }).catch((err) => {
+            console.log(err)
+          });
+          
+        } catch (err) {
+          console.log("Deletion Failed: ", err);
+        }
+      };
+      
+      deleteObjectFirebase();
+      return;
+    }
 
     setBox((prev) => {
       return { ...prev, objects: newState };
@@ -22,7 +58,7 @@ const VisualDeleteBlock = ({ box, setBox, boxObject, setIsToolUsed }) => {
 
   return (
     <div
-      onMouseUp={deleteObject}
+      onMouseUp={deleteBoxObject}
       onMouseOut={deleteObjectEnd}
       style={{
         position: "absolute",

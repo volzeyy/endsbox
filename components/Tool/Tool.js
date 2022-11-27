@@ -21,11 +21,11 @@ function Tool({ className, toolTip, toolId, children, ...otherEvents }) {
 
   return (
     <div className={className}>
-      <div className="tool-tip">
+      <div className='tool-tip'>
         <p>{toolTip}</p>
       </div>
       <label
-        className={`tool ${toolId === selectedTool ? 'active' : 'default'}`}
+        className={`tool ${toolId === selectedTool ? "active" : "default"}`}
         onClick={handleToolChange}
         {...otherEvents}
       >

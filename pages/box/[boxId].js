@@ -103,7 +103,7 @@ export default function BoxPage() {
           objects: [],
         };
       });
-    }
+    };
   }, [boxId]);
 
   return (

@@ -15,8 +15,8 @@ export default function UserSignupForm() {
   const user = useUserStore((state) => state.user);
 
   return (
-    <div className="background">
-      <div className="form">
+    <div className='background'>
+      <div className='form'>
         <h1>Create a Username</h1>
         <Formik
           initialValues={{ username: "" }}

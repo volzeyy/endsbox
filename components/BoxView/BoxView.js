@@ -25,7 +25,7 @@ function BoxView({ className, box, setBox, isSandbox }) {
       setIsCanDragBox(true);
       return;
     }
-    
+
     if (e.target.offsetParent.id) {
       return;
     }
@@ -34,8 +34,8 @@ function BoxView({ className, box, setBox, isSandbox }) {
       return {
         ...prev,
         selectedObjectId: "",
-      }
-    })
+      };
+    });
   };
 
   const dragBox = (e) => {
@@ -59,13 +59,13 @@ function BoxView({ className, box, setBox, isSandbox }) {
   const boxObjects = box.objects.map((object) => {
     return (
       <BoxObject
-          key={object.id}
-          boxObject={object}
-          box={box}
-          setBox={setBox}
-          isSandbox={isSandbox ? true : false}
-        />
-    )
+        key={object.id}
+        boxObject={object}
+        box={box}
+        setBox={setBox}
+        isSandbox={isSandbox ? true : false}
+      />
+    );
   });
 
   return (

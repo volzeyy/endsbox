@@ -33,34 +33,36 @@ const DropDown = ({ className, user }) => {
 
   const handleSignOut = () => {
     signOut(auth)
-    .then(() => {
+      .then(() => {
         useUserStore.getState().signOutUser();
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         alert(error);
-    });
-  }
+      });
+  };
 
   return (
     <div className={className}>
       {user ? (
         <>
-            <div className='dropdown-header'>
-            <img src={user.photoURL} alt='User Profile Image' referrerPolicy="no-referrer"/>
+          <div className='dropdown-header'>
+            <img
+              src={user.photoURL}
+              alt='User Profile Image'
+              referrerPolicy='no-referrer'
+            />
             <div className='user-info-container'>
-                <p className='user-display-name'>{user.displayName}</p>
-                <p className='user-username'>
+              <p className='user-display-name'>{user.displayName}</p>
+              <p className='user-username'>
                 @{user.username ? user.username : "NoUsername"}
-                </p>
+              </p>
             </div>
+          </div>
+          <div className='dropdown-body'>
+            <div className='sign-out' onClick={handleSignOut}>
+              <p>Sign Out</p>
             </div>
-            <div className="dropdown-body">
-                <div className='sign-out' onClick={handleSignOut}>
-                    <p>
-                        Sign Out
-                    </p>
-                </div>
-            </div>
+          </div>
         </>
       ) : (
         <div className='log-in' onClick={handleSignInWithGoogle}>

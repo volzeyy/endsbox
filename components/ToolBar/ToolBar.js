@@ -38,7 +38,7 @@ import { useUserStore } from "../../stores/userStore";
 function ToolBar({ className, isSandbox, box, setBox }) {
   const user = useUserStore((state) => state.user);
   const selectedTool = useToolStore((state) => state.selectedTool);
-  const router = useRouter()
+  const router = useRouter();
   const { boxId } = router.query;
 
   useEffect(() => {
@@ -49,11 +49,12 @@ function ToolBar({ className, isSandbox, box, setBox }) {
 
   const handleMediaImport = (e) => {
     let file = e.target.files[0];
-    console.log(e)
+    console.log(e);
 
     if (file === null || e.target.files.length === 0) {
       return;
     }
+    let uuid = v4();
 
     if (isSandbox) {
       const reader = new FileReader();
@@ -87,9 +88,8 @@ function ToolBar({ className, isSandbox, box, setBox }) {
 
       return;
     }
-    
-    let uuid = v4();
-    let objectsRef = collection(db, "objects")
+
+    let objectsRef = collection(db, "objects");
     let objectRef = ref(storage, `${boxId}/${uuid}`);
     uploadBytes(objectRef, file)
       .then(() => {

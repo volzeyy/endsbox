@@ -128,6 +128,7 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
           tempObject={tempObject}
           setTempObject={setTempObject}
           setIsToolUsed={setIsToolUsed}
+          isSandbox={isSandbox ? true : false}
         />
       ) : isToolUsed.delete ? (
         <VisualDeleteBlock
@@ -135,6 +136,7 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
           setBox={setBox}
           boxObject={boxObject}
           setIsToolUsed={setIsToolUsed}
+          isSandbox={isSandbox ? true : false}
         />
       ) : isToolUsed.resize ? (
         <VisualResizeBlock
@@ -144,6 +146,7 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
           tempObject={tempObject}
           setTempObject={setTempObject}
           setIsToolUsed={setIsToolUsed}
+          isSandbox={isSandbox ? true : false}
         />
       ) : null}
     </Fragment>

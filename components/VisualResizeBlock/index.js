@@ -1,4 +1,6 @@
 import React from "react";
+import { runTransaction, doc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const VisualResizeBlock = ({
   box,
@@ -7,6 +9,7 @@ const VisualResizeBlock = ({
   tempObject,
   setTempObject,
   setIsToolUsed,
+  isSandbox,
 }) => {
   const resizeObject = (e) => {
     setTempObject((prev) => {
@@ -22,6 +25,36 @@ const VisualResizeBlock = ({
     setIsToolUsed((prev) => {
       return { ...prev, resize: false };
     });
+
+    if (
+      boxObject.width === tempObject.width &&
+      boxObject.height === tempObject.height
+    ) {
+      return;
+    }
+
+    if (!isSandbox) {
+      console.log("saveeeeeeeeeeeeeeeeee resizeeeeeeeeeeeeeee");
+      const saveScale = async () => {
+        try {
+          await runTransaction(db, async (transaction) => {
+            const objectRef = doc(db, "objects", boxObject.id);
+            const objectDoc = await transaction.get(objectRef);
+            if (objectDoc.exists()) {
+              transaction.update(objectRef, {
+                width: tempObject.width,
+                height: tempObject.height,
+              });
+              console.log("transaction successfuly committed!");
+              return;
+            }
+          });
+        } catch (err) {
+          console.log("Transaction Failed: ", err);
+        }
+      };
+      saveScale();
+    }
 
     const newState = box.objects.map((object) => {
       if (object.id === boxObject.id) {

@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
 
-function Logo({className}) {
+function Logo({ className }) {
   return (
-    <Link href="/">
+    <Link href='/'>
       <div className={className}>
-        <div className="img-container">
+        <div className='img-container'>
           <img src='/eternebox.png' alt='logo' />
         </div>
         <div>eterneBox</div>
