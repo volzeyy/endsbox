@@ -8,8 +8,20 @@ export const StyledNavBar = styled(NavBar)`
     padding: 10px 20px;
     background-color: rgb(255, 255, 255);
     border-bottom: 1px rgb(227, 227, 227) solid;
-    display: grid;
-    align-items: center;
-    grid-template-columns: auto auto;
+    display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    & .right-side {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+
+        & a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 `

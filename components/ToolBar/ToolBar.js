@@ -74,6 +74,7 @@ function ToolBar({ className, box, setBox }) {
     };
   };
 
+  /*
   const handleAddText = () => {
     setBox((prevBox) => {
       return {
@@ -95,6 +96,7 @@ function ToolBar({ className, box, setBox }) {
       };
     });
   };
+  */
 
   const handleZoomIn = (e) => {
     e.preventDefault();
@@ -120,14 +122,6 @@ function ToolBar({ className, box, setBox }) {
     });
   };
 
-  const handleSortToTheBottom = (e) => {
-    e.preventDefault();
-  };
-
-  const handleSortToTheTop = (e) => {
-    e.preventDefault();
-  };
-
   return (
     <div className={className}>
       <div className="action-group">
@@ -149,15 +143,6 @@ function ToolBar({ className, box, setBox }) {
             style={{ display: "none" }}
             onChange={handleMediaImport}
             id='import-media'
-          />
-        </BoxAction>
-        <BoxAction toolTip='Add Text' toolId='add-text'>
-          <TitleRoundedIcon />
-          <input
-            type='button'
-            style={{ display: "none" }}
-            onClick={handleAddText}
-            id='add-text'
           />
         </BoxAction>
       </div>
@@ -183,27 +168,6 @@ function ToolBar({ className, box, setBox }) {
           <input type='button' style={{ display: "none" }} id='zoom-out' />
         </BoxAction>
       </div>
-
-      {box.selectedObjectId ? (
-        <div className="action-group">
-          <BoxAction
-            toolTip='Move Object to the Bottom'
-            toolId='sort-bottom'
-            onClick={handleSortToTheBottom}
-          >
-            <VerticalAlignBottomRoundedIcon />
-            <input type='button' style={{ display: "none" }} id='sort-bottom' />
-          </BoxAction>
-          <BoxAction
-            toolTip='Move Object to the Top'
-            toolId='sort-top'
-            onClick={handleSortToTheTop}
-          >
-            <VerticalAlignTopRoundedIcon />
-            <input type='button' style={{ display: "none" }} id='sort-top' />
-          </BoxAction>
-        </div>
-      ) : null}
 
       <div className="action-group">
         <BoxAction toolTip='Customize this Box' toolId='customize-box'>
