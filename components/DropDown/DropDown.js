@@ -46,7 +46,7 @@ const DropDown = ({ className, user }) => {
       {user ? (
         <>
             <div className='dropdown-header'>
-            <img src={user.photoURL} alt='User Profile Image' />
+            <img src={user.photoURL} alt='User Profile Image' referrerPolicy="no-referrer"/>
             <div className='user-info-container'>
                 <p className='user-display-name'>{user.displayName}</p>
                 <p className='user-username'>

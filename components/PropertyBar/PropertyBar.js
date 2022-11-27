@@ -20,6 +20,8 @@ function PropertyBar({ className, box, setBox }) {
     }
   }, [box.selectedObjectId])
 
+  // move things like changing order to this ocmponent instead of it being in toolbar
+
   return (
     <div className={className}>
       {selectedTool === "customize-box" ? (

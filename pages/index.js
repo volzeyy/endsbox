@@ -70,7 +70,7 @@ export default function Home() {
         <>
           <BoxView box={box} setBox={setBox} />
           <PropertyBar box={box} setBox={setBox} show={box.selectedObjectId || selectedTool === "customize-box" ? true : false } />
-          <ToolBar box={box} setBox={setBox} />
+          <ToolBar box={box} setBox={setBox} show={box.selectedObjectId || selectedTool === "customize-box" ? true : false } />
         </>
       )}
     </MainContainer>
