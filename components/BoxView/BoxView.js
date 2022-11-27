@@ -4,7 +4,7 @@ import BoxObject from "../BoxObject";
 
 import { useToolStore } from "../../stores/toolStore";
 
-function BoxView({ className, box, setBox }) {
+function BoxView({ className, box, setBox, isSandbox }) {
   const selectedTool = useToolStore((state) => state.selectedTool);
 
   const [isCanDragBox, setIsCanDragBox] = useState(false);
@@ -63,6 +63,7 @@ function BoxView({ className, box, setBox }) {
           boxObject={object}
           box={box}
           setBox={setBox}
+          isSandbox={isSandbox ? true : false}
         />
     )
   });

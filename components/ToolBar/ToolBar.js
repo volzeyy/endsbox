@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 // COMPONENTS
 import BoxAction from "../Tool";
@@ -24,12 +25,21 @@ import VerticalAlignTopRoundedIcon from "@mui/icons-material/VerticalAlignTopRou
 
 import PaletteRoundedIcon from "@mui/icons-material/PaletteRounded";
 
-// other
+// FIREBASE
+import { ref, uploadBytes } from "firebase/storage";
+import { doc, setDoc, collection } from "firebase/firestore";
+import { storage, db } from "../../firebase";
+
+// OTHER
 
 import { useToolStore } from "../../stores/toolStore";
+import { useUserStore } from "../../stores/userStore";
 
-function ToolBar({ className, box, setBox }) {
+function ToolBar({ className, isSandbox, box, setBox }) {
+  const user = useUserStore((state) => state.user);
   const selectedTool = useToolStore((state) => state.selectedTool);
+  const router = useRouter()
+  const { boxId } = router.query;
 
   useEffect(() => {
     setBox((prev) => {
@@ -39,39 +49,98 @@ function ToolBar({ className, box, setBox }) {
 
   const handleMediaImport = (e) => {
     let file = e.target.files[0];
+    console.log(e)
 
-    if (file === null) {
+    if (file === null || e.target.files.length === 0) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      let media = new Image();
-      media.src = reader.result;
-      media.onload = () => {
-        setBox((prevBox) => {
-          return {
-            ...prevBox,
-            objects: [
-              ...prevBox.objects,
-              {
-                id: v4(),
-                src: reader.result,
+    if (isSandbox) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let media = new Image();
+        media.src = reader.result;
+        media.onload = () => {
+          setBox((prevBox) => {
+            return {
+              ...prevBox,
+              objects: [
+                ...prevBox.objects,
+                {
+                  id: uuid,
+                  src: reader.result,
+                  position: {
+                    x: prevBox.position.x * -1 * (1 / prevBox.scale),
+                    y: prevBox.position.y * -1 * (1 / prevBox.scale),
+                  },
+                  width: media.width,
+                  height: media.height,
+                  index: prevBox.objects.length,
+                  type: "media",
+                },
+              ],
+            };
+          });
+        };
+      };
+
+      return;
+    }
+    
+    let uuid = v4();
+    let objectsRef = collection(db, "objects")
+    let objectRef = ref(storage, `${boxId}/${uuid}`);
+    uploadBytes(objectRef, file)
+      .then(() => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          let media = new Image();
+          media.src = reader.result;
+          media.onload = async () => {
+            try {
+              await setDoc(doc(objectsRef, `${uuid}`), {
+                id: uuid,
                 position: {
-                  x: prevBox.position.x * -1 * (1 / prevBox.scale),
-                  y: prevBox.position.y * -1 * (1 / prevBox.scale),
+                  x: box.position.x * -1 * (1 / box.scale),
+                  y: box.position.y * -1 * (1 / box.scale),
                 },
                 width: media.width,
                 height: media.height,
-                index: prevBox.objects.length,
+                index: box.objects.length,
                 type: "media",
-              },
-            ],
+              });
+              console.log("setDocced");
+              setBox((prevBox) => {
+                return {
+                  ...prevBox,
+                  objects: [
+                    ...prevBox.objects,
+                    {
+                      id: uuid,
+                      src: reader.result,
+                      position: {
+                        x: prevBox.position.x * -1 * (1 / prevBox.scale),
+                        y: prevBox.position.y * -1 * (1 / prevBox.scale),
+                      },
+                      width: media.width,
+                      height: media.height,
+                      index: prevBox.objects.length,
+                      type: "media",
+                    },
+                  ],
+                };
+              });
+            } catch (err) {
+              console.log("media.onload err: ", err);
+            }
           };
-        });
-      };
-    };
+        };
+      })
+      .catch((err) => {
+        alert("uploadBytes err: ", err);
+      });
   };
 
   /*
@@ -124,7 +193,7 @@ function ToolBar({ className, box, setBox }) {
 
   return (
     <div className={className}>
-      <div className="action-group">
+      <div className='action-group'>
         <BoxAction toolTip='Select' toolId='select'>
           <PanToolAltRoundedIcon />
           <input type='button' style={{ display: "none" }} id='select' />
@@ -135,7 +204,7 @@ function ToolBar({ className, box, setBox }) {
         </BoxAction>
       </div>
 
-      <div className="action-group">
+      <div className='action-group'>
         <BoxAction toolTip='Import Media' toolId='import-media'>
           <AddPhotoAlternateRoundedIcon />
           <input
@@ -147,7 +216,7 @@ function ToolBar({ className, box, setBox }) {
         </BoxAction>
       </div>
 
-      <div className="action-group">
+      <div className='action-group'>
         <BoxAction toolTip='Delete an Object' toolId='delete'>
           <DeleteForeverRoundedIcon />
           <input type='button' style={{ display: "none" }} id='delete' />
@@ -158,7 +227,7 @@ function ToolBar({ className, box, setBox }) {
         </BoxAction>
       </div>
 
-      <div className="action-group">
+      <div className='action-group'>
         <BoxAction toolTip='Zoom In' toolId='zoom-in' onClick={handleZoomIn}>
           <ZoomInRoundedIcon />
           <input type='button' style={{ display: "none" }} id='zoom-in' />
@@ -169,7 +238,7 @@ function ToolBar({ className, box, setBox }) {
         </BoxAction>
       </div>
 
-      <div className="action-group">
+      <div className='action-group'>
         <BoxAction toolTip='Customize this Box' toolId='customize-box'>
           <PaletteRoundedIcon />
           <input type='button' style={{ display: "none" }} id='customize-box' />

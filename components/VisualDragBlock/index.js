@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { runTransaction, doc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const VisualDragBlock = ({ box, setBox, boxObject, tempObject, setTempObject, setIsToolUsed }) => {
   const dragObject = (e) => {
@@ -28,6 +29,29 @@ const VisualDragBlock = ({ box, setBox, boxObject, tempObject, setTempObject, se
 
       return;
     }
+
+    console.log("saveeeeeeeeeeeeeeeeee positionnnnnnnnnnnn")
+    const savePosition = async () => {
+      try {
+        await runTransaction(db, async (transaction) => {
+          const objectRef = doc(db, "objects", boxObject.id)
+          const objectDoc = await transaction.get(objectRef)
+          if (objectDoc.exists()) {
+            transaction.update(objectRef, {
+              position: {
+                x: tempObject.position.x,
+                y: tempObject.position.y
+              }
+            })
+            console.log("transaction successfuly committed!");
+            return;
+          }
+        })
+      } catch (err) {
+        console.log("Transaction Failed: ", err)
+      }
+    }
+    savePosition();
 
     const newState = box.objects.map((object) => {
       if (object.id === boxObject.id) {

@@ -6,7 +6,7 @@ import VisualDragBlock from "../VisualDragBlock";
 import VisualDeleteBlock from "../VisualDeleteBlock";
 import VisualResizeBlock from "../VisualResizeBlock";
 
-function BoxObject({ boxObject, box, setBox }) {
+function BoxObject({ boxObject, box, setBox, isSandbox }) {
   const selectedTool = useToolStore((state) => state.selectedTool);
 
   const [isToolUsed, setIsToolUsed] = useState({
