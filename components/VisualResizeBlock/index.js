@@ -33,29 +33,6 @@ const VisualResizeBlock = ({
       return;
     }
 
-    if (!isSandbox) {
-      console.log("saveeeeeeeeeeeeeeeeee resizeeeeeeeeeeeeeee");
-      const saveScale = async () => {
-        try {
-          await runTransaction(db, async (transaction) => {
-            const objectRef = doc(db, "objects", boxObject.id);
-            const objectDoc = await transaction.get(objectRef);
-            if (objectDoc.exists()) {
-              transaction.update(objectRef, {
-                width: tempObject.width,
-                height: tempObject.height,
-              });
-              console.log("transaction successfuly committed!");
-              return;
-            }
-          });
-        } catch (err) {
-          console.log("Transaction Failed: ", err);
-        }
-      };
-      saveScale();
-    }
-
     const newState = box.objects.map((object) => {
       if (object.id === boxObject.id) {
         return {
@@ -66,10 +43,40 @@ const VisualResizeBlock = ({
       }
       return object;
     });
+    const oldState = box.objects;
 
     setBox((prev) => {
       return { ...prev, objects: newState };
     });
+
+    if (!isSandbox) {
+      console.log("saveeeeeeeeeeeeeeeeee resizeeeeeeeeeeeeeee");
+      const saveScale = async () => {
+          runTransaction(db, async (transaction) => {
+            const objectRef = doc(db, "objects", boxObject.id);
+            const objectDoc = await transaction.get(objectRef);
+            if (objectDoc.exists()) {
+              transaction.update(objectRef, {
+                width: tempObject.width,
+                height: tempObject.height,
+              })
+            }
+          }).then(() => {
+            console.log("success")
+          }).catch(() => {
+            setTempObject(prev => {
+              return {...prev,
+                width: boxObject.width,
+                height: boxObject.height,
+              }
+            })
+            setBox(prev => {
+              return {...prev, objects: oldState} 
+            })
+          })
+      };
+      saveScale();
+    };
   };
 
   return (

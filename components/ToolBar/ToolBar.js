@@ -90,7 +90,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
     }
 
     let objectsRef = collection(db, "objects");
-    let objectRef = ref(storage, `${boxId}/${uuid}`);
+    let objectRef = ref(storage, `boxes/${boxId}/${uuid}`);
     uploadBytes(objectRef, file)
       .then(() => {
         const reader = new FileReader();
@@ -101,6 +101,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
           media.onload = async () => {
             try {
               await setDoc(doc(objectsRef, `${uuid}`), {
+                owner: user.uid,
                 id: uuid,
                 position: {
                   x: box.position.x * -1 * (1 / box.scale),

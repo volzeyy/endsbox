@@ -42,31 +42,6 @@ const VisualDragBlock = ({
       return;
     }
 
-    if (!isSandbox) {
-      console.log("saveeeeeeeeeeeeeeeeee positionnnnnnnnnnnn");
-      const savePosition = async () => {
-        try {
-          await runTransaction(db, async (transaction) => {
-            const objectRef = doc(db, "objects", boxObject.id);
-            const objectDoc = await transaction.get(objectRef);
-            if (objectDoc.exists()) {
-              transaction.update(objectRef, {
-                position: {
-                  x: tempObject.position.x,
-                  y: tempObject.position.y,
-                },
-              });
-              console.log("transaction successfuly committed!");
-              return;
-            }
-          });
-        } catch (err) {
-          console.log("Transaction Failed: ", err);
-        }
-      };
-      savePosition();
-    }
-
     const newState = box.objects.map((object) => {
       if (object.id === boxObject.id) {
         return {
@@ -80,10 +55,43 @@ const VisualDragBlock = ({
 
       return object;
     });
+    const oldState = box.objects;
 
     setBox((prev) => {
       return { ...prev, objects: newState };
     });
+
+    if (!isSandbox) {
+      const savePosition = async () => {
+          runTransaction(db, async (transaction) => {
+            const objectRef = doc(db, "objects", boxObject.id);
+            const objectDoc = await transaction.get(objectRef);
+            if (objectDoc.exists()) {
+              transaction.update(objectRef, {
+                position: {
+                  x: tempObject.position.x,
+                  y: tempObject.position.y,
+                },
+              });
+            }
+          }).then(() => {
+            console.log("success")
+          }).catch(() => {
+            setTempObject(prev => {
+              return {...prev,
+                position: {
+                  x: boxObject.position.x,
+                  y: boxObject.position.y,
+                }
+              }
+            })
+            setBox(prev => {
+              return {...prev, objects: oldState}
+            })
+          })
+      };
+      savePosition();
+    }
   };
 
   return (

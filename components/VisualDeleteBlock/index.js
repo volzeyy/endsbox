@@ -24,17 +24,24 @@ const VisualDeleteBlock = ({
       const deleteObjectFirebase = async () => {
         try {
           await deleteDoc(doc(db, "objects", boxObject.id));
-          const objectRef = ref(storage, `${boxId}/${boxObject.id}`);
+          console.log("1")
+          const objectRef = ref(storage, `boxes/${boxId}/${boxObject.id}`);
+          console.log("2")
           deleteObject(objectRef).then(() => {
+            console.log("3")
             setBox((prev) => {
               return { ...prev, objects: newState };
             });
           }).catch((err) => {
+            console.log("4 - err")
             console.log(err)
+            setIsToolUsed((prev) => {
+              return { ...prev, delete: false };
+            });
           });
           
         } catch (err) {
-          console.log("Deletion Failed: ", err);
+          console.log("Objectttttttt Deletion Failed: ", err);
         }
       };
       

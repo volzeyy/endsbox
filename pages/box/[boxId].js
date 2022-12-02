@@ -47,9 +47,8 @@ export default function BoxPage() {
 
     const getStoredImages = async () => {
       try {
-        let imageListRef = ref(storage, `${boxId}/`);
+        let imageListRef = ref(storage, `boxes/${boxId}/`);
         let res = await listAll(imageListRef);
-        console.log(boxId);
         res.items.forEach((item) => {
           console.log(item);
           getDownloadURL(item).then(async (res) => {
