@@ -28,7 +28,7 @@ import PaletteRoundedIcon from "@mui/icons-material/PaletteRounded";
 // FIREBASE
 import { ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, collection } from "firebase/firestore";
-import { storage, db } from "../../firebase";
+import { storage, db } from "../../firebase/firebaseClient";
 
 // OTHER
 

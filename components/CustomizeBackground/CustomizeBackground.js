@@ -1,7 +1,75 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
-function CustomizeBackground({ box, setBox }) {
-  const handleBackgroundChange = (e) => {
+import { useRouter } from "next/router";
+import { useUserStore } from "../../stores/userStore";
+
+import { ref, uploadBytes, deleteObject } from "firebase/storage";
+import { doc, setDoc, collection, deleteDoc } from "firebase/firestore";
+import { storage, db } from "../../firebase/firebaseClient";
+import { v4 } from "uuid";
+
+function CustomizeBackground({ box, setBox, isSandbox }) {
+  const user = useUserStore((state) => state.user);
+  const router = useRouter();
+  const { boxId } = router.query;
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (!boxId) {
+      return;
+    }
+
+    let uuid = v4();
+
+    const updateFirebaseBackground = async () => {
+      let backgroundsRef = collection(db, "backgrounds");
+      let backgroundRef = ref(storage, `boxes/${boxId}/${uuid}`);
+
+      if (!box.background.id) {
+        await setDoc(doc(backgroundsRef, `${uuid}`), {
+          owner: user.uid,
+          ...box.background,
+          id: uuid,
+          image: "",
+        });
+        uploadBytes(backgroundRef, "")
+          .then(() => {
+            setBox((prev) => {
+              return {...prev,
+                background: {
+                  ...prev.background,
+                  id: uuid,
+                }
+              }
+            });
+          })
+          .catch((err) => {
+            alert("upload first Bytes err: ", err);
+          });
+          return
+      }
+
+      await setDoc(doc(backgroundsRef, `${box.background.id}`), {
+        owner: user.uid,
+        ...box.background,
+        image: "",
+      });
+    };
+
+    let delayThis = setTimeout(updateFirebaseBackground, 2000);
+
+    return () => {
+      clearTimeout(delayThis);
+    };
+  }, [box.background]);
+
+  const handleBackgroundColorChange = (e) => {
     e.preventDefault();
 
     setBox((prev) => {
@@ -15,10 +83,10 @@ function CustomizeBackground({ box, setBox }) {
     });
   };
 
-  const handleBackgroundUpload = (e) => {
+  const handleBackgroundUpload = async (e) => {
     let file = e.target.files[0];
 
-    if (file === null) {
+    if (file === null || e.target.files.length === 0) {
       return;
     }
 
@@ -33,12 +101,97 @@ function CustomizeBackground({ box, setBox }) {
             ...prev,
             background: {
               ...prev.background,
-              image: `url(${reader.result})`,
+              image: reader.result,
             },
           };
         });
       };
     };
+
+    if (box.background.id) {
+      await deleteDoc(doc(db, "backgrounds", box.background.id));
+      let backgroundRef = ref(storage, `boxes/${boxId}/${box.background.id}`);
+      deleteObject(backgroundRef)
+        .then(() => {
+          console.log("deleted");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      let backgroundsRef = collection(db, "backgrounds");
+      backgroundRef = ref(storage, `boxes/${boxId}/${box.background.id}`);
+      uploadBytes(backgroundRef, file)
+        .then(() => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            let media = new Image();
+            media.src = reader.result;
+            media.onload = async () => {
+              try {
+                await setDoc(doc(backgroundsRef, `${box.background.id}`), {
+                  owner: user.uid,
+                  ...box.background,
+                  image: "",
+                });
+                console.log("setDocced background");
+                setBox((prev) => {
+                  return {
+                    ...prev,
+                    background: {
+                      ...prev.background,
+                      image: reader.result,
+                    },
+                  };
+                });
+              } catch (err) {
+                console.log("media.onload err: ", err);
+              }
+            };
+          };
+        })
+        .catch((err) => {
+          alert("uploadBytes err: ", err);
+        });
+      return;
+    }
+
+    let backgroundsRef = collection(db, "backgrounds");
+    let objectRef = ref(storage, `boxes/${boxId}/${uuid}`);
+    uploadBytes(objectRef, file)
+      .then(() => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          let media = new Image();
+          media.src = reader.result;
+          media.onload = async () => {
+            try {
+              await setDoc(doc(backgroundsRef, `${uuid}`), {
+                owner: user.uid,
+                id: uuid,
+              });
+              console.log("setDocced background");
+              setBox((prev) => {
+                return {
+                  ...prev,
+                  background: {
+                    ...prev.background,
+                    id: uuid,
+                    image: reader.result,
+                  },
+                };
+              });
+            } catch (err) {
+              console.log("media.onload err: ", err);
+            }
+          };
+        };
+      })
+      .catch((err) => {
+        alert("uploadBytes err: ", err);
+      });
   };
 
   const handleRepeatChange = (e) => {
@@ -109,12 +262,13 @@ function CustomizeBackground({ box, setBox }) {
 
   return (
     <>
-      <label htmlFor='set-background-color' onChange={handleBackgroundChange}>
+      <label htmlFor='set-background-color'>
         Change Background Color
         <input
           type='color'
           id='set-background-color'
           value={box.background.color}
+          onChange={handleBackgroundColorChange}
         ></input>
       </label>
       <label htmlFor='set-background-image'>

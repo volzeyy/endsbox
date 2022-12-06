@@ -1,15 +1,11 @@
-import { runTransaction, doc } from "firebase/firestore";
-import { db } from "../../firebase";
-
 const VisualDragBlock = ({
   box,
-  setBox,
   boxObject,
   tempObject,
   setTempObject,
-  setIsToolUsed,
-  isSandbox,
+  dragObjectEnd,
 }) => {
+
   const dragObject = (e) => {
     setTempObject((prev) => {
       return {
@@ -22,83 +18,12 @@ const VisualDragBlock = ({
     });
   };
 
-  const dragObjectEnd = () => {
-    setIsToolUsed((prev) => {
-      return { ...prev, drag: false };
-    });
-
-    if (
-      tempObject.position.x === boxObject.position.x &&
-      tempObject.position.y === boxObject.position.y
-    ) {
-      setBox((prev) => {
-        return {
-          ...prev,
-          selectedObjectId:
-            boxObject.id === prev.selectedObjectId ? "" : boxObject.id,
-        };
-      });
-
-      return;
-    }
-
-    const newState = box.objects.map((object) => {
-      if (object.id === boxObject.id) {
-        return {
-          ...object,
-          position: {
-            x: tempObject.position.x,
-            y: tempObject.position.y,
-          },
-        };
-      }
-
-      return object;
-    });
-    const oldState = box.objects;
-
-    setBox((prev) => {
-      return { ...prev, objects: newState };
-    });
-
-    if (!isSandbox) {
-      const savePosition = async () => {
-          runTransaction(db, async (transaction) => {
-            const objectRef = doc(db, "objects", boxObject.id);
-            const objectDoc = await transaction.get(objectRef);
-            if (objectDoc.exists()) {
-              transaction.update(objectRef, {
-                position: {
-                  x: tempObject.position.x,
-                  y: tempObject.position.y,
-                },
-              });
-            }
-          }).then(() => {
-            console.log("success")
-          }).catch(() => {
-            setTempObject(prev => {
-              return {...prev,
-                position: {
-                  x: boxObject.position.x,
-                  y: boxObject.position.y,
-                }
-              }
-            })
-            setBox(prev => {
-              return {...prev, objects: oldState}
-            })
-          })
-      };
-      savePosition();
-    }
-  };
-
   return (
     <div
       onMouseMove={dragObject}
       onMouseUp={dragObjectEnd}
       onMouseOut={dragObjectEnd}
+      draggable="false"
       style={{
         position: "absolute",
         zIndex: box.objects.length + 1,

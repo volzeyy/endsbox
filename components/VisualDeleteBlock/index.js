@@ -1,59 +1,10 @@
-import React from "react";
-import { useRouter } from "next/router";
-import { getStorage, ref, deleteObject } from "firebase/storage";
-import { doc, deleteDoc } from "firebase/firestore";
-import { db, storage } from "../../firebase";
-
 const VisualDeleteBlock = ({
   box,
   setBox,
   boxObject,
   setIsToolUsed,
-  isSandbox,
+  deleteBoxObject,
 }) => {
-  const router = useRouter();
-  const { boxId } = router.query;
-
-  const deleteBoxObject = () => {
-    const newState = box.objects.filter((object) => {
-      return object.id !== boxObject.id;
-    });
-
-    if (!isSandbox) {
-      console.log("deleteeeeeeeeeee objecttttttttttttttttt");
-      const deleteObjectFirebase = async () => {
-        try {
-          await deleteDoc(doc(db, "objects", boxObject.id));
-          console.log("1")
-          const objectRef = ref(storage, `boxes/${boxId}/${boxObject.id}`);
-          console.log("2")
-          deleteObject(objectRef).then(() => {
-            console.log("3")
-            setBox((prev) => {
-              return { ...prev, objects: newState };
-            });
-          }).catch((err) => {
-            console.log("4 - err")
-            console.log(err)
-            setIsToolUsed((prev) => {
-              return { ...prev, delete: false };
-            });
-          });
-          
-        } catch (err) {
-          console.log("Objectttttttt Deletion Failed: ", err);
-        }
-      };
-      
-      deleteObjectFirebase();
-      return;
-    }
-
-    setBox((prev) => {
-      return { ...prev, objects: newState };
-    });
-  };
-
   const deleteObjectEnd = () => {
     setIsToolUsed((prev) => {
       return { ...prev, delete: false };

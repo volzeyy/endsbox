@@ -1,6 +1,6 @@
 import React from "react";
 
-import { auth, db } from "../../firebase";
+import { auth, db } from "../../firebase/firebaseClient";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useUserStore } from "../../stores/userStore";
@@ -41,6 +41,10 @@ const DropDown = ({ className, user }) => {
       });
   };
 
+  const handlePremiumSubscribe = () => {
+    console.log("premiumm")
+  }
+
   return (
     <div className={className}>
       {user ? (
@@ -59,6 +63,9 @@ const DropDown = ({ className, user }) => {
             </div>
           </div>
           <div className='dropdown-body'>
+            <div className="go-premium" onClick={handlePremiumSubscribe}>
+              <p>Go Premium 📀</p>
+            </div>
             <div className='sign-out' onClick={handleSignOut}>
               <p>Sign Out</p>
             </div>

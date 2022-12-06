@@ -24,7 +24,6 @@ export default function UserSignupForm() {
             await new Promise((resolve) => setTimeout(resolve, 500));
 
             if (!user) {
-              // because useState is asynchronous
               return;
             }
 
@@ -43,8 +42,10 @@ export default function UserSignupForm() {
               usersRef,
               {
                 username: values.username,
-                description: `${values.username} does not have a description yet`,
-                subscription: false,
+                email: user.email,
+                name: user.displayName,
+                provider: user.providerData[0].providerId,
+                photoUrl: user.photoURL,
               },
               { merge: true }
             );

@@ -8,9 +8,12 @@ function BoxView({ className, box, setBox, isSandbox }) {
   const selectedTool = useToolStore((state) => state.selectedTool);
 
   const [isCanDragBox, setIsCanDragBox] = useState(false);
+  const [previousTouch, setPreviousTouch] = useState(false);
 
   useEffect(() => {
-    document.body.style.backgroundImage = box.background.image;
+    console.log(box.background)
+    document.body.style.backgroundOrigin
+    document.body.style.backgroundImage = `url(${box.background.image})`;
     document.body.style.backgroundColor = box.background.color;
     document.body.style.backgroundRepeat = box.background.repeat;
     document.body.style.backgroundBlendMode = box.background.blendMode;
@@ -38,6 +41,26 @@ function BoxView({ className, box, setBox, isSandbox }) {
     });
   };
 
+  const onTouchStart = (e) => {
+    setPreviousTouch(e.touches[0])
+
+    if (selectedTool == "pan") {
+      setIsCanDragBox(true);
+      return;
+    }
+
+    if (e.target.offsetParent.id) {
+      return;
+    }
+
+    setBox((prev) => {
+      return {
+        ...prev,
+        selectedObjectId: "",
+      };
+    });
+  }
+
   const dragBox = (e) => {
     if (isCanDragBox) {
       setBox((prevBox) => {
@@ -51,6 +74,29 @@ function BoxView({ className, box, setBox, isSandbox }) {
       });
     }
   };
+
+  const dragBoxMobile = (e) => {
+      const touch = e.touches[0];
+  
+      if (isCanDragBox) {
+        if (previousTouch) {
+          let movementX = touch.pageX - previousTouch.pageX;
+          let movementY = touch.pageY - previousTouch.pageY;
+    
+          setBox((prevBox) => {
+            return {
+              ...prevBox,
+              position: {
+                x: prevBox.position.x + movementX,
+                y: prevBox.position.y + movementY,
+              },
+            };
+          });
+        }
+      }
+  
+    setPreviousTouch(touch);
+  }
 
   const dragBoxEnd = () => {
     setIsCanDragBox(false);
@@ -74,6 +120,9 @@ function BoxView({ className, box, setBox, isSandbox }) {
       onMouseDown={onMouseDown}
       onMouseMove={dragBox}
       onMouseUp={dragBoxEnd}
+      onTouchStart={onTouchStart}
+      onTouchMove={dragBoxMobile}
+      onTouchEnd={dragBoxEnd}
     >
       {boxObjects}
     </div>

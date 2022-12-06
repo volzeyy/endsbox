@@ -52,7 +52,7 @@ export const StyledDropDown = styled(DropDown)`
         justify-content: center;
         align-items: flex-start;
 
-        & .sign-out {
+        & .sign-out, .go-premium {
             padding: 10px;
             width: 100%;
 
