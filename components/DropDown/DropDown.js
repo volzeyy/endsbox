@@ -6,9 +6,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { useUserStore } from "../../stores/userStore";
 
 import GoogleIcon from "@mui/icons-material/Google";
+import { createCheckoutSession } from "../../stripe/createCheckoutSession";
+import usePremiumStatus from "../../stripe/usePremiumStatus";
 
 const DropDown = ({ className, user }) => {
   const provider = new GoogleAuthProvider();
+
+  const userIsPremium = usePremiumStatus(user)
 
   const handleSignInWithGoogle = () => {
     signInWithPopup(auth, provider)
@@ -42,7 +46,7 @@ const DropDown = ({ className, user }) => {
   };
 
   const handlePremiumSubscribe = () => {
-    console.log("premiumm")
+    createCheckoutSession(user.uid)
   }
 
   return (
@@ -63,9 +67,15 @@ const DropDown = ({ className, user }) => {
             </div>
           </div>
           <div className='dropdown-body'>
-            <div className="go-premium" onClick={handlePremiumSubscribe}>
-              <p>Go Premium 📀</p>
-            </div>
+            {!userIsPremium ?
+              <div className="go-premium" onClick={handlePremiumSubscribe}>
+                <p>Go Premium 📀</p>
+              </div>
+            :
+              <div className="premium-status">
+                <p>You are PREMIUM!! 📀</p>
+              </div>
+            }
             <div className='sign-out' onClick={handleSignOut}>
               <p>Sign Out</p>
             </div>
