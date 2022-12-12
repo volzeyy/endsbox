@@ -5,7 +5,7 @@ import CustomizeBackground from "../CustomizeBackground";
 import CustomizeText from "../CustomizeText";
 import CustomizeMedia from "../CustomizeMedia";
 
-function PropertyBar({ className, box, setBox }) {
+function PropertyBar({ className, box, setBox, isSandbox }) {
   const selectedTool = useToolStore((state) => state.selectedTool);
 
   const [selectedObject, setSelectedObject] = useState({});
@@ -25,7 +25,7 @@ function PropertyBar({ className, box, setBox }) {
   return (
     <div className={className}>
       {selectedTool === "customize-box" ? (
-        <CustomizeBackground box={box} setBox={setBox} />
+        <CustomizeBackground box={box} setBox={setBox} isSandbox={isSandbox} />
       ) : selectedObject.type === "text" ? (
         <CustomizeText
           selectedObject={selectedObject}

@@ -9,12 +9,17 @@ import PropertyBar from "../../components/PropertyBar";
 import ToolBar from "../../components/ToolBar";
 
 import { useToolStore } from "../../stores/toolStore";
+import { useUserStore } from "../../stores/userStore";
+
+import usePremiumStatus from "../../stripe/usePremiumStatus";
 
 import { listAll, ref, getDownloadURL } from "firebase/storage";
 import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../../firebase/firebaseClient";
 
 export default function BoxPage() {
+  const user = useUserStore((state) => state.user);
+  const userIsPremium = usePremiumStatus(user);
   const selectedTool = useToolStore((state) => state.selectedTool);
   const router = useRouter();
   const { boxId } = router.query;
@@ -90,7 +95,6 @@ export default function BoxPage() {
 
             if (backgroundSnap.exists()) {
               const data = backgroundSnap.data();
-              console.log(data)
               setBox(prev => {
                 return {...prev,
                   background: {
@@ -104,7 +108,7 @@ export default function BoxPage() {
           });
         });
       } catch (err) {
-        console.log(err);
+        alert("Error Loading in Images I suppose")
       }
     };
 
@@ -116,6 +120,17 @@ export default function BoxPage() {
           ...prev,
           owner: boxId,
           objects: [],
+          background: {
+            position: {
+              x: 0,
+              y: 0,
+            },
+            color: "",
+            image: "",
+            repeat: "repeat",
+            size: "cover",
+            blendMode: "",
+          },
         };
       });
     };
@@ -124,17 +139,19 @@ export default function BoxPage() {
   return (
     <MainContainer toolbar={true}>
       <Head>
-        <title>eternebox</title>
+        <title>{boxId ? boxId : "Loading..."}</title>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <>
         <BoxView box={box} setBox={setBox} />
-        <PropertyBar
-          box={box}
-          setBox={setBox}
-          show={selectedTool === "customize-box" ? true : false}
-        />
+        {user?.username === boxId && userIsPremium ?
+          <PropertyBar
+            box={box}
+            setBox={setBox}
+            show={selectedTool === "customize-box" ? true : false}
+          />
+        : null}
         <ToolBar
           box={box}
           setBox={setBox}

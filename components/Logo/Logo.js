@@ -6,9 +6,9 @@ function Logo({ className }) {
     <Link href='/'>
       <div className={className}>
         <div className='img-container'>
-          <img src='/eternebox.png' alt='logo' />
+          <img src='/endsbox.png' alt='logo' />
         </div>
-        <div>eterneBox</div>
+        <div>endsbox</div>
       </div>
     </Link>
   );

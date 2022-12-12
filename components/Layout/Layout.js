@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import NavBar from "../NavBar";
 import { useUserStore } from "../../stores/userStore";
-import UserSignUpForm from "../UserSignupForm";
+import UserSignUpForm from "../UserSignUpForm";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 

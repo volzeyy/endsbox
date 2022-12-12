@@ -11,7 +11,6 @@ function BoxView({ className, box, setBox, isSandbox }) {
   const [previousTouch, setPreviousTouch] = useState(false);
 
   useEffect(() => {
-    console.log(box.background)
     document.body.style.backgroundOrigin
     document.body.style.backgroundImage = `url(${box.background.image})`;
     document.body.style.backgroundColor = box.background.color;

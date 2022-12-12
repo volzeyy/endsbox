@@ -2,13 +2,12 @@ import styled from "styled-components";
 import UserSignUpForm from "./UserSignUpForm"
 
 export const StyledUserSignUpForm = styled(UserSignUpForm)`
-    & .background {
-        width: 100%;
-        height: 100%;
-        display: grid;
-        justify-items: center;
-        align-items: center;
-    }
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
 
     & .form {
         background-color: white;

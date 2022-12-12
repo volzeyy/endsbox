@@ -20,6 +20,10 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
       isFirstRender.current = false;
       return;
     }
+    
+    if (isSandbox) {
+      return;
+    }
 
     if (!boxId) {
       return;
@@ -40,17 +44,10 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
         });
         uploadBytes(backgroundRef, "")
           .then(() => {
-            setBox((prev) => {
-              return {...prev,
-                background: {
-                  ...prev.background,
-                  id: uuid,
-                }
-              }
-            });
+            console.log("uploaded background")
           })
           .catch((err) => {
-            alert("upload first Bytes err: ", err);
+            alert("Failed to Upload Background");
           });
           return
       }
@@ -90,6 +87,8 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
       return;
     }
 
+    let uuid = v4();
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
@@ -108,6 +107,10 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
       };
     };
 
+    if (isSandbox) {
+      return;
+    }
+
     if (box.background.id) {
       await deleteDoc(doc(db, "backgrounds", box.background.id));
       let backgroundRef = ref(storage, `boxes/${boxId}/${box.background.id}`);
@@ -116,7 +119,7 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
           console.log("deleted");
         })
         .catch((err) => {
-          console.log(err);
+          alert("Failed to Delete Object")
         });
 
       let backgroundsRef = collection(db, "backgrounds");
@@ -135,7 +138,6 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
                   ...box.background,
                   image: "",
                 });
-                console.log("setDocced background");
                 setBox((prev) => {
                   return {
                     ...prev,
@@ -146,13 +148,13 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
                   };
                 });
               } catch (err) {
-                console.log("media.onload err: ", err);
+                alert("Failed to update Background Document")
               }
             };
           };
         })
         .catch((err) => {
-          alert("uploadBytes err: ", err);
+          alert("Failed to Upload Background to Storage");
         });
       return;
     }
@@ -172,7 +174,6 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
                 owner: user.uid,
                 id: uuid,
               });
-              console.log("setDocced background");
               setBox((prev) => {
                 return {
                   ...prev,
@@ -184,13 +185,13 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
                 };
               });
             } catch (err) {
-              console.log("media.onload err: ", err);
+              alert("Failed to update Background Document")
             }
           };
         };
       })
       .catch((err) => {
-        alert("uploadBytes err: ", err);
+        alert("Failed to Upload Background to Storage");
       });
   };
 

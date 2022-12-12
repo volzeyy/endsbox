@@ -1,42 +1,36 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-// COMPONENTS
 import BoxAction from "../Tool";
 
-// EXTERNAL LIBS
 import { v4 } from "uuid";
 
-// MUI ICONS
 import PanToolAltRoundedIcon from "@mui/icons-material/PanToolAltRounded";
 import PanToolRoundedIcon from "@mui/icons-material/PanToolRounded";
-
 import ZoomInRoundedIcon from "@mui/icons-material/ZoomInRounded";
 import ZoomOutRoundedIcon from "@mui/icons-material/ZoomOutRounded";
-
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 import TitleRoundedIcon from "@mui/icons-material/TitleRounded";
-
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
-
 import VerticalAlignBottomRoundedIcon from "@mui/icons-material/VerticalAlignBottomRounded";
 import VerticalAlignTopRoundedIcon from "@mui/icons-material/VerticalAlignTopRounded";
-
 import PaletteRoundedIcon from "@mui/icons-material/PaletteRounded";
 
-// FIREBASE
 import { ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, collection } from "firebase/firestore";
-import { storage, db } from "../../firebase/firebaseClient";
-
-// OTHER
+import { storage, db, auth } from "../../firebase/firebaseClient";
 
 import { useToolStore } from "../../stores/toolStore";
 import { useUserStore } from "../../stores/userStore";
 
+import { useAuthState } from "react-firebase-hooks/auth";
+import usePremiumStatus from "../../stripe/usePremiumStatus";
+
 function ToolBar({ className, isSandbox, box, setBox }) {
-  const user = useUserStore((state) => state.user);
+  const userState = useUserStore((state) => state.user);
+  const [user, userLoading] = useAuthState(auth);
+  const userIsPremium = usePremiumStatus(user);
   const selectedTool = useToolStore((state) => state.selectedTool);
   const router = useRouter();
   const { boxId } = router.query;
@@ -112,7 +106,6 @@ function ToolBar({ className, isSandbox, box, setBox }) {
                 index: box.objects.length,
                 type: "media",
               });
-              console.log("setDocced");
               setBox((prevBox) => {
                 return {
                   ...prevBox,
@@ -134,13 +127,13 @@ function ToolBar({ className, isSandbox, box, setBox }) {
                 };
               });
             } catch (err) {
-              console.log("media.onload err: ", err);
+              console.log("Failed to Update Database");
             }
           };
         };
       })
       .catch((err) => {
-        alert("uploadBytes err: ", err);
+        alert("Failed to Upload Image to Storage")
       });
   };
 
@@ -176,7 +169,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
         return { ...prev, scale: 1 };
       }
 
-      return { ...prev, scale: prev.scale + 0.05 };
+      return { ...prev, scale: prev.scale + 0.1 };
     });
   };
 
@@ -184,49 +177,56 @@ function ToolBar({ className, isSandbox, box, setBox }) {
     e.preventDefault();
 
     setBox((prev) => {
-      if (prev.scale <= 0.051) {
-        return { ...prev, scale: 0.05 };
+      if (prev.scale <= 0.11) {
+        return { ...prev, scale: 0.1 };
       }
 
-      return { ...prev, scale: prev.scale - 0.05 };
+      return { ...prev, scale: prev.scale - 0.1 };
     });
   };
 
   return (
     <div className={className}>
       <div className='action-group'>
-        <BoxAction toolTip='Select' toolId='select'>
-          <PanToolAltRoundedIcon />
-          <input type='button' style={{ display: "none" }} id='select' />
-        </BoxAction>
+        {isSandbox || ( user && userState?.username === boxId && userIsPremium ) ?
+          <BoxAction toolTip='Select' toolId='select'>
+            <PanToolAltRoundedIcon />
+            <input type='button' style={{ display: "none" }} id='select' />
+          </BoxAction>
+        : null}
         <BoxAction toolTip='Pan' toolId='pan'>
           <PanToolRoundedIcon />
           <input type='button' style={{ display: "none" }} id='pan' />
         </BoxAction>
       </div>
 
-      <div className='action-group'>
-        <BoxAction toolTip='Import Media' toolId='import-media'>
-          <AddPhotoAlternateRoundedIcon />
-          <input
-            type='file'
-            style={{ display: "none" }}
-            onChange={handleMediaImport}
-            id='import-media'
-          />
-        </BoxAction>
-      </div>
+      {isSandbox || user && userState?.username === boxId && userIsPremium ?
+        <div className='action-group'>
+          <BoxAction toolTip='Import Media' toolId='import-media'>
+            <AddPhotoAlternateRoundedIcon />
+            <input
+              type='file'
+              style={{ display: "none" }}
+              onChange={handleMediaImport}
+              accept="image/*"
+              id='import-media'
+            />
+          </BoxAction>
+        </div>
+      : null}
 
-      <div className='action-group'>
-        <BoxAction toolTip='Delete an Object' toolId='delete'>
-          <DeleteForeverRoundedIcon />
-          <input type='button' style={{ display: "none" }} id='delete' />
-        </BoxAction>
-        <BoxAction toolTip='Resize an Object' toolId='resize'>
-          <CropFreeRoundedIcon />
-          <input type='button' style={{ display: "none" }} id='resize' />
-        </BoxAction>
-      </div>
+      {isSandbox || user && userState?.username === boxId && userIsPremium ?
+        <div className='action-group'>
+          <BoxAction toolTip='Delete an Object' toolId='delete'>
+            <DeleteForeverRoundedIcon />
+            <input type='button' style={{ display: "none" }} id='delete' />
+          </BoxAction>
+          <BoxAction toolTip='Resize an Object' toolId='resize'>
+            <CropFreeRoundedIcon />
+            <input type='button' style={{ display: "none" }} id='resize' />
+          </BoxAction>
+        </div>
+      : null}
 
       <div className='action-group'>
         <BoxAction toolTip='Zoom In' toolId='zoom-in' onClick={handleZoomIn}>
@@ -239,12 +239,14 @@ function ToolBar({ className, isSandbox, box, setBox }) {
         </BoxAction>
       </div>
 
-      <div className='action-group'>
-        <BoxAction toolTip='Customize this Box' toolId='customize-box'>
-          <PaletteRoundedIcon />
-          <input type='button' style={{ display: "none" }} id='customize-box' />
-        </BoxAction>
-      </div>
+      {isSandbox || user && userState?.username === boxId && userIsPremium ?
+        <div className='action-group'>
+          <BoxAction toolTip='Customize this Box' toolId='customize-box'>
+            <PaletteRoundedIcon />
+            <input type='button' style={{ display: "none" }} id='customize-box' />
+          </BoxAction>
+        </div>
+      : null}
     </div>
   );
 }

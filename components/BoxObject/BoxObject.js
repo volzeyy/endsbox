@@ -365,22 +365,25 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         onTouchCancel={onTouchEnd}
-        id={boxObject.id}
+        id={boxObject?.id}
         draggable='false'
         userselect='none'
         style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           position: "absolute",
           outline: `${
-            boxObject.id === box.selectedObjectId ? "2px dotted blue" : ""
+            boxObject?.id === box?.selectedObjectId ? "2px dotted blue" : ""
           }`,
           transform: `translate(${
             boxObject.position.x * box.scale + box.position.x
           }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
-          width: `${boxObject.width && boxObject.width * box.scale}px`,
-          height: `${boxObject.height && boxObject.height * box.scale}px`,
+          width: `${Math.round(boxObject?.width && boxObject?.width * box.scale)}px`,
+          height: `${Math.round(boxObject?.height && boxObject?.height * box.scale)}px`,
         }}
       >
-        {boxObject.type === "media" ? (
+        {boxObject?.type === "media" ? (
           <img
             draggable='false'
             src={boxObject.src}
@@ -391,15 +394,15 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
               userSelect: "none",
             }}
           />
-        ) : boxObject.type === "text" ? (
+        ) : boxObject?.type === "text" ? (
           <p
             draggable='false'
             style={{
               margin: 0,
               fontSize: boxObject.fontSize * box.scale,
               userSelect: "none",
-              width: "100%",
-              height: "100%",
+              maxWidth: "100%",
+              maxHeight: "100%",
             }}
           >
             {boxObject.text}

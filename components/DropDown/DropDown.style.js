@@ -52,7 +52,7 @@ export const StyledDropDown = styled(DropDown)`
         justify-content: center;
         align-items: flex-start;
 
-        & .sign-out, .go-premium, .premium-status {
+        & .sign-out, .go-premium {
             padding: 10px;
             width: 100%;
 
@@ -60,6 +60,11 @@ export const StyledDropDown = styled(DropDown)`
                 background-color: rgba(0, 0, 0, 0.1);
                 cursor: pointer;
             }
+        }
+
+        & .premium-status {
+            padding: 10px;
+            width: 100%;
         }
     }
 

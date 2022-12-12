@@ -11,11 +11,21 @@ import { db } from "../../firebase";
 
 import { useUserStore } from "../../stores/userStore";
 
-export default function UserSignupForm() {
+export default function UserSignUpForm({className}) {
   const user = useUserStore((state) => state.user);
 
+  function validateUsername(value) {
+    let error;
+    if (!value) {
+      error = "Username is Required"
+    } else if (!/^[a-z0-9_-]{3,16}$/.test(value)) {
+      error = 'Incompatible Username';
+    }
+    return error;
+  }
+
   return (
-    <div className='background'>
+    <div className={className}>
       <div className='form'>
         <h1>Create a Username</h1>
         <Formik
@@ -26,7 +36,7 @@ export default function UserSignupForm() {
             if (!user) {
               return;
             }
-
+            
             const q = query(
               collection(db, "users"),
               where("username", "==", `${values.username}`)
@@ -54,10 +64,13 @@ export default function UserSignupForm() {
             useUserStore.getState().setUsername(values.username);
           }}
         >
-          <Form>
-            <Field name='username' type='text' />
-            <button type='submit'>Create</button>
-          </Form>
+          {({errors, touched, validateField}) => (
+            <Form>
+              {errors.username && touched.username && <div>{errors.username}</div> }
+              <Field name='username' type='text' validate={validateUsername} />
+              <button type='submit' onClick={() => validateField('username')}>Create</button>
+            </Form>
+          )}
         </Formik>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 import { auth, db } from "../../firebase/firebaseClient";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
@@ -7,12 +8,9 @@ import { useUserStore } from "../../stores/userStore";
 
 import GoogleIcon from "@mui/icons-material/Google";
 import { createCheckoutSession } from "../../stripe/createCheckoutSession";
-import usePremiumStatus from "../../stripe/usePremiumStatus";
 
-const DropDown = ({ className, user }) => {
+const DropDown = ({ className, user, userIsPremium }) => {
   const provider = new GoogleAuthProvider();
-
-  const userIsPremium = usePremiumStatus(user)
 
   const handleSignInWithGoogle = () => {
     signInWithPopup(auth, provider)
@@ -67,15 +65,15 @@ const DropDown = ({ className, user }) => {
             </div>
           </div>
           <div className='dropdown-body'>
-            {!userIsPremium ?
+            {!userIsPremium && user?.username ?
               <div className="go-premium" onClick={handlePremiumSubscribe}>
-                <p>Go Premium 📀</p>
+                <p>Get Early Access 📀</p>
               </div>
-            :
+            : userIsPremium && user?.username ?
               <div className="premium-status">
                 <p>You are PREMIUM!! 📀</p>
               </div>
-            }
+            : null}
             <div className='sign-out' onClick={handleSignOut}>
               <p>Sign Out</p>
             </div>
@@ -88,11 +86,6 @@ const DropDown = ({ className, user }) => {
           </p>
         </div>
       )}
-      <div className='legals-container'>
-        <p>Content Policy</p>
-        <p>Terms</p>
-        <p>About</p>
-      </div>
     </div>
   );
 };

@@ -1,19 +1,19 @@
 import { ViewInArRounded, WidgetsRounded } from "@mui/icons-material";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
 
 import { useUserStore } from "../../stores/userStore";
+
+import usePremiumStatus from "../../stripe/usePremiumStatus";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase"
 
 import Logo from "../Logo";
 import UserAvatar from "../UserAvatar";
 
 function NavBar({ className }) {
-  const user = useUserStore((state) => state.user);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+  const userState = useUserStore((state) => state.user);
+  const [user, userLoading] = useAuthState(auth);
+  const userIsPremium = usePremiumStatus(user);
 
   return (
     <header className={className}>
@@ -22,12 +22,12 @@ function NavBar({ className }) {
         <Link href='/sandbox'>
           <WidgetsRounded />
         </Link>
-        {isLoaded && user && user.hasOwnProperty("username") ? (
-          <Link href={`/box/${user.username}`}>
+        {!userLoading && userState?.username && userIsPremium ? (
+          <Link href={`/box/${userState?.username}`}>
             <ViewInArRounded />
           </Link>
         ) : null}
-        <UserAvatar user={user} />
+        <UserAvatar user={userState} userIsPremium={userIsPremium} />
       </div>
     </header>
   );
