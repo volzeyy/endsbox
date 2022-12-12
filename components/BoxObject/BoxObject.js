@@ -386,6 +386,7 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
         {boxObject?.type === "media" ? (
           <img
             draggable='false'
+            referrerPolicy="no-referrer"
             src={boxObject.src}
             alt='image'
             width='100%'
