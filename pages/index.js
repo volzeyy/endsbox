@@ -32,10 +32,6 @@ export default function Home() {
     selectedObjectId: "",
   });
 
-  useEffect(() => {
-    console.log(box.objects)
-  }, [box.objects])
-
   return (
     <MainContainer>
       <Head>

@@ -25,10 +25,6 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
       return;
     }
 
-    if (!boxId) {
-      return;
-    }
-
     let uuid = v4();
 
     const updateFirebaseBackground = async () => {

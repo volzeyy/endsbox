@@ -15,17 +15,19 @@ import usePremiumStatus from "../../stripe/usePremiumStatus";
 
 import { listAll, ref, getDownloadURL } from "firebase/storage";
 import { doc, getDoc } from "firebase/firestore";
-import { db, storage } from "../../firebase/firebaseClient";
+import { db, storage, auth } from "../../firebase/firebaseClient";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function BoxPage() {
-  const user = useUserStore((state) => state.user);
-  const userIsPremium = usePremiumStatus(user);
+  const userState = useUserStore((state) => state.user);
   const selectedTool = useToolStore((state) => state.selectedTool);
   const router = useRouter();
   const { boxId } = router.query;
-
+  
   const isFirstRender = useRef(true);
-
+  
+  const [user, userLoading] = useAuthState(auth);
+  const userIsPremium = usePremiumStatus(user);
   const [box, setBox] = useState({
     owner: boxId,
     background: {
@@ -53,7 +55,6 @@ export default function BoxPage() {
 
     const getStoredImages = async () => {
       try {
-        console.log("stored images")
         let imageListRef = ref(storage, `boxes/${boxId}/`);
         let res = await listAll(imageListRef);
         res.items.forEach((item) => {
@@ -140,10 +141,9 @@ export default function BoxPage() {
         <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      {isFirstRender.current === false ?
         <>
           <BoxView box={box} setBox={setBox} />
-          {user?.username === boxId && userIsPremium ?
+          {user && userState?.username === boxId && userIsPremium ?
             <PropertyBar
               box={box}
               setBox={setBox}
@@ -156,9 +156,6 @@ export default function BoxPage() {
             show={selectedTool === "customize-box" ? true : false}
           />
         </>
-      :
-        <h1>Loading...</h1>
-      }
     </MainContainer>
   );
 }
