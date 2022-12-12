@@ -51,10 +51,6 @@ export default function BoxPage() {
       return;
     }
 
-    if (!boxId) {
-      return;
-    }
-
     const getStoredImages = async () => {
       try {
         let imageListRef = ref(storage, `boxes/${boxId}/`);
