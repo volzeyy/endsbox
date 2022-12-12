@@ -53,6 +53,7 @@ export default function BoxPage() {
 
     const getStoredImages = async () => {
       try {
+        console.log("stored images")
         let imageListRef = ref(storage, `boxes/${boxId}/`);
         let res = await listAll(imageListRef);
         res.items.forEach((item) => {
@@ -139,21 +140,25 @@ export default function BoxPage() {
         <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <>
-        <BoxView box={box} setBox={setBox} />
-        {user?.username === boxId && userIsPremium ?
-          <PropertyBar
+      {isFirstRender.current === false ?
+        <>
+          <BoxView box={box} setBox={setBox} />
+          {user?.username === boxId && userIsPremium ?
+            <PropertyBar
+              box={box}
+              setBox={setBox}
+              show={selectedTool === "customize-box" ? true : false}
+            />
+          : null}
+          <ToolBar
             box={box}
             setBox={setBox}
             show={selectedTool === "customize-box" ? true : false}
           />
-        : null}
-        <ToolBar
-          box={box}
-          setBox={setBox}
-          show={selectedTool === "customize-box" ? true : false}
-        />
-      </>
+        </>
+      :
+        <h1>Loading...</h1>
+      }
     </MainContainer>
   );
 }
