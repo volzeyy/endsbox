@@ -23,9 +23,9 @@ function NavBar({ className }) {
           <WidgetsRounded />
         </Link>
         {!userLoading && userState?.username && userIsPremium ? (
-          <Link href={`/box/${userState?.username}`}>
+          <a href={`/box/${userState?.username}`}>
             <ViewInArRounded />
-          </Link>
+          </a>
         ) : null}
         <UserAvatar user={userState} userIsPremium={userIsPremium} />
       </div>

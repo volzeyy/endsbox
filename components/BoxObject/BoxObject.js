@@ -379,8 +379,8 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
           transform: `translate(${
             boxObject.position.x * box.scale + box.position.x
           }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
-          width: `${Math.round(boxObject?.width && boxObject?.width * box.scale)}px`,
-          height: `${Math.round(boxObject?.height && boxObject?.height * box.scale)}px`,
+          width: `${boxObject?.width && boxObject?.width * box.scale}px`,
+          height: `${boxObject?.height && boxObject?.height * box.scale}px`,
         }}
       >
         {boxObject?.type === "media" ? (
