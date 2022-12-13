@@ -7,4 +7,5 @@ export const MainContainer = styled.main`
   width: 100%;
   height: 100%;
   grid-template-rows: 1fr;
+  overflow: hidden;
 `;

@@ -11,5 +11,5 @@ export const StyledPropertyBar = styled(PropertyBar)`
     background-color: white;
     border-top: 1px solid rgb(233, 233, 233);
     width: 100%;
-    z-index: 111;
+    z-index: 99999;
 `

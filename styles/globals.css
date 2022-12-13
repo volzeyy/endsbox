@@ -14,6 +14,7 @@ body {
   justify-items: center;
   align-items: center;
   grid-template-rows: auto 1fr;
+  overflow: hidden;
 }
 
 a {

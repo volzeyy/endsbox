@@ -138,7 +138,7 @@ export default function BoxPage() {
     <MainContainer toolbar={true}>
       <Head>
         <title>{boxId ? boxId : "Loading..."}</title>
-        <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale-1.0, minimum-scale=1.0" />
         <link rel='icon' href='/favicon.ico' />
       </Head>
         <>
