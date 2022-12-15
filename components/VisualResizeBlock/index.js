@@ -26,8 +26,9 @@ const VisualResizeBlock = ({
         width: tempObject.width * box.scale,
         height: tempObject.height * box.scale,
         backgroundColor: "rgba(255, 146, 0, 0.4)",
-        left: `${boxObject.position.x * box.scale + box.position.x}px`,
-        top: `${boxObject.position.y * box.scale + box.position.y}px`,
+        transform: `translate(${
+          boxObject.position.x * box.scale + box.position.x
+        }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
       }}
     />
   );

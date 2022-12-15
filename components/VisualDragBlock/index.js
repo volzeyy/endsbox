@@ -30,8 +30,9 @@ const VisualDragBlock = ({
         width: boxObject.width * box.scale,
         height: boxObject.height * box.scale,
         backgroundColor: "rgba(0, 146, 255, 0.43)",
-        left: `${tempObject.position.x * box.scale + box.position.x}px`,
-        top: `${tempObject.position.y * box.scale + box.position.y}px`,
+        transform: `translate(${
+          tempObject.position.x * box.scale + box.position.x
+        }px, ${tempObject.position.y * box.scale + box.position.y}px)`,
       }}
     />
   );

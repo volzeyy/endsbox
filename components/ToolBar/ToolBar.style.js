@@ -6,11 +6,13 @@ export const StyledToolBar = styled(ToolBar)`
     --selected-background-color: #000000;
     background-color: ${({show}) => show ? "white" : "rgba(0,0,0,0)"};
     z-index: 1000000;
-    width: inherit;
+    width: 100%;
     padding: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    bottom: 0px;
 
     & .action-group {
         background-color: var(--background-color);

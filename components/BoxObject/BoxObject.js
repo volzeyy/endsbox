@@ -366,7 +366,6 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
         onTouchEnd={onTouchEnd}
         onTouchCancel={onTouchEnd}
         id={boxObject?.id}
-        draggable='false'
         userselect='none'
         style={{
           overflow: "hidden",
@@ -374,30 +373,27 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
           justifyContent: "center",
           alignItems: "center",
           position: "absolute",
-          outline: `${
-            boxObject?.id === box?.selectedObjectId ? "2px dotted blue" : ""
-          }`,
-          left: `${boxObject.position.x * box.scale + box.position.x}px`,
-          top: `${boxObject.position.y * box.scale + box.position.y}px`,
-          width: `${boxObject?.width && boxObject?.width * box.scale}px`,
-          height: `${boxObject?.height && boxObject?.height * box.scale}px`,
+          width:`${boxObject?.width && boxObject?.width * box.scale}px`,
+          height:`${boxObject?.height && boxObject?.height * box.scale}px`,
+          transform: `translate(${
+            boxObject.position.x * box.scale + box.position.x
+          }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
         }}
       >
         {boxObject?.type === "media" ? (
           <img
-            draggable='false'
             referrerPolicy="no-referrer"
             src={boxObject.src}
             alt='image'
-            width='100%'
-            height='100%'
+            width="100%"
+            height="100%"
+            draggable="false"
             style={{
               userSelect: "none",
             }}
           />
         ) : boxObject?.type === "text" ? (
           <p
-            draggable='false'
             style={{
               margin: 0,
               fontSize: boxObject.fontSize * box.scale,

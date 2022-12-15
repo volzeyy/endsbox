@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
 export const MainContainer = styled.main`
-    overflow: hidden;
     display: grid;
     justify-items: center;
     align-items: center;

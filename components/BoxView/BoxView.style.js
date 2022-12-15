@@ -6,6 +6,8 @@ export const StyledBoxView = styled(BoxView)`
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    position: absolute;
+    top: 0px;
     width: 100%;
-    height: 100%;
+    height: 100vh;
 `
