@@ -369,6 +369,7 @@ function BoxObject({ boxObject, box, setBox, isSandbox }) {
         draggable='false'
         userselect='none'
         style={{
+          overflow: "hidden",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
