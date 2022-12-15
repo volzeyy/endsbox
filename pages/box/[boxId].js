@@ -27,7 +27,6 @@ export default function BoxPage() {
   const isFirstRender = useRef(true);
   
   const [user, userLoading] = useAuthState(auth);
-  const userIsPremium = usePremiumStatus(user);
   const [box, setBox] = useState({
     owner: boxId,
     background: {
@@ -143,7 +142,7 @@ export default function BoxPage() {
       </Head>
         <>
           <BoxView box={box} setBox={setBox} />
-          {user && userState?.username === boxId && userIsPremium ?
+          {user && userState?.username === boxId ?
             <PropertyBar
               box={box}
               setBox={setBox}

@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 
 import { auth, db } from "../../firebase/firebaseClient";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
@@ -9,7 +8,7 @@ import { useUserStore } from "../../stores/userStore";
 import GoogleIcon from "@mui/icons-material/Google";
 import { createCheckoutSession } from "../../stripe/createCheckoutSession";
 
-const DropDown = ({ className, user, userIsPremium }) => {
+const DropDown = ({ className, user }) => {
   const provider = new GoogleAuthProvider();
 
   const handleSignInWithGoogle = () => {
@@ -43,10 +42,6 @@ const DropDown = ({ className, user, userIsPremium }) => {
       });
   };
 
-  const handlePremiumSubscribe = () => {
-    createCheckoutSession(user.uid)
-  }
-
   return (
     <div className={className}>
       {user ? (
@@ -65,15 +60,15 @@ const DropDown = ({ className, user, userIsPremium }) => {
             </div>
           </div>
           <div className='dropdown-body'>
-            {!userIsPremium && user?.username ?
-              <div className="go-premium" onClick={handlePremiumSubscribe}>
-                <p>Get Early Access 📀</p>
+            { user?.username ?
+              <div className="dropdown-body-section">
+                <p>Log In to get your own Box</p>
               </div>
-            : userIsPremium && user?.username ?
-              <div className="premium-status">
-                <p>You are PREMIUM!! 📀</p>
+            : user ?
+              <div className="dropdown-body-section">
+                <p>Get yourself a name!</p>
               </div>
-            : null}
+            : null }
             <div className='sign-out' onClick={handleSignOut}>
               <p>Sign Out</p>
             </div>

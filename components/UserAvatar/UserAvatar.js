@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import DropDown from "../DropDown";
 
-const UserAvatar = ({ className, user, userIsPremium }) => {
+const UserAvatar = ({ className, user }) => {
   const [isDropDownActive, setIsDropDownActive] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -31,7 +31,7 @@ const UserAvatar = ({ className, user, userIsPremium }) => {
           />
         )}
       </div>
-      {isDropDownActive ? <DropDown user={user} userIsPremium={userIsPremium} /> : null}
+      {isDropDownActive ? <DropDown user={user} /> : null}
     </>
   );
 };

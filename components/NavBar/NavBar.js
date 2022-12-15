@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { useUserStore } from "../../stores/userStore";
 
-import usePremiumStatus from "../../stripe/usePremiumStatus";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase"
 
@@ -13,7 +12,6 @@ import UserAvatar from "../UserAvatar";
 function NavBar({ className }) {
   const userState = useUserStore((state) => state.user);
   const [user, userLoading] = useAuthState(auth);
-  const userIsPremium = usePremiumStatus(user);
 
   return (
     <header className={className}>
@@ -22,12 +20,12 @@ function NavBar({ className }) {
         <Link href='/sandbox'>
           <WidgetsRounded />
         </Link>
-        {!userLoading && userState?.username && userIsPremium ? (
+        {!userLoading && userState?.username ? (
           <a href={`/box/${userState?.username}`}>
             <ViewInArRounded />
           </a>
         ) : null}
-        <UserAvatar user={userState} userIsPremium={userIsPremium} />
+        <UserAvatar user={userState} />
       </div>
     </header>
   );

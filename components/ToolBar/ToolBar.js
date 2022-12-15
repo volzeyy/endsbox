@@ -30,7 +30,6 @@ import usePremiumStatus from "../../stripe/usePremiumStatus";
 function ToolBar({ className, isSandbox, box, setBox }) {
   const userState = useUserStore((state) => state.user);
   const [user, userLoading] = useAuthState(auth);
-  const userIsPremium = usePremiumStatus(user);
   const selectedTool = useToolStore((state) => state.selectedTool);
   const router = useRouter();
   const { boxId } = router.query;
@@ -188,7 +187,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
   return (
     <div className={className}>
       <div className='action-group'>
-        {isSandbox || ( user && userState?.username === boxId && userIsPremium ) ?
+        {isSandbox || ( user && userState?.username === boxId ) ?
           <BoxAction toolTip='Select' toolId='select'>
             <PanToolAltRoundedIcon />
             <input type='button' style={{ display: "none" }} id='select' />
@@ -200,7 +199,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
         </BoxAction>
       </div>
 
-      {isSandbox || user && userState?.username === boxId && userIsPremium ?
+      {isSandbox || user && userState?.username === boxId ?
         <div className='action-group'>
           <BoxAction toolTip='Import Media' toolId='import-media'>
             <AddPhotoAlternateRoundedIcon />
@@ -215,7 +214,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
         </div>
       : null}
 
-      {isSandbox || user && userState?.username === boxId && userIsPremium ?
+      {isSandbox || user && userState?.username === boxId ?
         <div className='action-group'>
           <BoxAction toolTip='Delete an Object' toolId='delete'>
             <DeleteForeverRoundedIcon />
@@ -239,7 +238,7 @@ function ToolBar({ className, isSandbox, box, setBox }) {
         </BoxAction>
       </div>
 
-      {isSandbox || user && userState?.username === boxId && userIsPremium ?
+      {isSandbox || user && userState?.username === boxId ?
         <div className='action-group'>
           <BoxAction toolTip='Customize this Box' toolId='customize-box'>
             <PaletteRoundedIcon />
