@@ -24,9 +24,8 @@ const VisualDeleteBlock = ({
         width: boxObject.width * box.scale,
         height: boxObject.height * box.scale,
         backgroundColor: "rgba(255, 10, 20, 0.43)",
-        transform: `translate(${
-          boxObject.position.x * box.scale + box.position.x
-        }px, ${boxObject.position.y * box.scale + box.position.y}px)`,
+        left: `${boxObject.position.x * box.scale + box.position.x}px`,
+        top: `${boxObject.position.y * box.scale + box.position.y}px`,
       }}
     />
   );
