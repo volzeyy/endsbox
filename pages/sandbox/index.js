@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import {isMobile} from 'react-device-detect';
 
@@ -13,7 +13,7 @@ import { useToolStore } from "../../stores/toolStore";
 export default function BoxPage() {
   const selectedTool = useToolStore((state) => state.selectedTool);
 
-  const [mobile, setMobile] = useState()
+  const [mobile, setMobile] = useState(false)
   const [box, setBox] = useState({
     owner: "",
     background: {
