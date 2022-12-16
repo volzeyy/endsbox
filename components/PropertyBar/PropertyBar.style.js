@@ -10,6 +10,8 @@ export const StyledPropertyBar = styled(PropertyBar)`
     gap: 20px;
     background-color: white;
     border-top: 1px solid rgb(233, 233, 233);
+    position: absolute;
+    bottom: ${({mobile}) => mobile ? "110px" : "40px"};
     width: 100%;
     z-index: 99999;
 `

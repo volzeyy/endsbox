@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import {isMobile} from 'react-device-detect';
 
 import { MainContainer } from "../../styles/BoxPage.style";
 
@@ -12,6 +13,7 @@ import { useToolStore } from "../../stores/toolStore";
 export default function BoxPage() {
   const selectedTool = useToolStore((state) => state.selectedTool);
 
+  const [mobile, setMobile] = useState()
   const [box, setBox] = useState({
     owner: "",
     background: {
@@ -31,6 +33,10 @@ export default function BoxPage() {
     selectedObjectId: "",
   });
 
+  useEffect(() => {
+    setMobile(isMobile)
+  }, [setMobile])
+
   return (
     <MainContainer
       toolbar={true}
@@ -42,8 +48,8 @@ export default function BoxPage() {
       </Head>
         <>
           <BoxView box={box} setBox={setBox} isSandbox />
-          <PropertyBar isSandbox box={box} setBox={setBox} show={ selectedTool === "customize-box" ? true : false } />
-          <ToolBar isSandbox setBox={setBox} show={ selectedTool === "customize-box" ? true : false } />
+          <PropertyBar isSandbox box={box} setBox={setBox} mobile={mobile} show={ selectedTool === "customize-box" ? true : false } />
+          <ToolBar isSandbox setBox={setBox} mobile={mobile} show={ selectedTool === "customize-box" ? true : false } />
         </>
     </MainContainer>
   );

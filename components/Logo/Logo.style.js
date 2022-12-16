@@ -8,6 +8,7 @@ export const StyledLogo = styled(Logo)`
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: visible !important;
 
     & .img-container {
         display: flex;

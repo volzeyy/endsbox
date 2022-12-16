@@ -3,19 +3,20 @@ body {
   padding: 0;
   margin: 0;
   height: 100%;
+  overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 body {
+  overflow: hidden;
   position: relative;
   width: 100vw;
   height: 100vh;
 }
 
 #__next {
-  width: 100%;
-  height: 100%;
+  height: 100vh;
   display: grid;
   justify-items: center;
   align-items: center;
@@ -26,8 +27,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-* {
-  overflow: hidden;
 }

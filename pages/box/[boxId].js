@@ -11,6 +11,7 @@ import ToolBar from "../../components/ToolBar";
 import { useToolStore } from "../../stores/toolStore";
 import { useUserStore } from "../../stores/userStore";
 
+import {isMobile} from 'react-device-detect';
 import usePremiumStatus from "../../stripe/usePremiumStatus";
 
 import { listAll, ref, getDownloadURL } from "firebase/storage";
@@ -26,6 +27,7 @@ export default function BoxPage() {
   
   const isFirstRender = useRef(true);
   
+  const [mobile, setMobile] = useState(false)
   const [user, userLoading] = useAuthState(auth);
   const [box, setBox] = useState({
     owner: boxId,
@@ -133,6 +135,10 @@ export default function BoxPage() {
     };
   }, [boxId]);
 
+  useEffect(() => {
+    setMobile(isMobile)
+  }, [setMobile])
+
   return (
     <MainContainer toolbar={true}>
       <Head>
@@ -146,12 +152,14 @@ export default function BoxPage() {
             <PropertyBar
               box={box}
               setBox={setBox}
+              mobile={mobile}
               show={selectedTool === "customize-box" ? true : false}
             />
           : null}
           <ToolBar
             box={box}
             setBox={setBox}
+            mobile={mobile}
             show={selectedTool === "customize-box" ? true : false}
           />
         </>

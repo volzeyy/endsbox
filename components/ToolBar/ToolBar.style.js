@@ -12,7 +12,7 @@ export const StyledToolBar = styled(ToolBar)`
     justify-content: center;
     align-items: center;
     position: absolute;
-    bottom: 0px;
+    bottom: ${({mobile}) => mobile ? "60px" : "0px"};
 
     & .action-group {
         background-color: var(--background-color);
