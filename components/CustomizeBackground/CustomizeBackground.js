@@ -36,7 +36,6 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
           owner: user.uid,
           ...box.background,
           id: uuid,
-          image: "",
         });
         uploadBytes(backgroundRef, "")
           .then(() => {
@@ -51,7 +50,6 @@ function CustomizeBackground({ box, setBox, isSandbox }) {
       await setDoc(doc(backgroundsRef, `${box.background.id}`), {
         owner: user.uid,
         ...box.background,
-        image: "",
       });
     };
 
