@@ -11,8 +11,13 @@ export const StyledNavBar = styled(NavBar)`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
+    & .left-side {
+        margin: 0px 10px;
+    }
 
     & .right-side {
+        margin: 0px 10px;
         display: flex;
         justify-content: center;
         align-items: center;

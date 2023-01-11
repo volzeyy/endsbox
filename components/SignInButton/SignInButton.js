@@ -13,10 +13,10 @@ function SignInButton({ className }) {
   const handleSignInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(async (res) => {
-        const user = res.user;
-        useUserStore.getState().logInUser(user);
+        const loggedInUser = res.user;
+        useUserStore.getState().logInUser(loggedInUser);
 
-        const docRef = doc(db, "users", user.uid);
+        const docRef = doc(db, "users", loggedInUser.uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {

@@ -8,6 +8,7 @@ import { auth } from "../../firebase"
 
 import Logo from "../Logo";
 import UserAvatar from "../UserAvatar";
+import SignInButton from "../SignInButton";
 
 function NavBar({ className }) {
   const userState = useUserStore((state) => state.user);
@@ -15,7 +16,9 @@ function NavBar({ className }) {
 
   return (
     <header className={className}>
-      <Logo />
+      <div className='left-side'>
+        <Logo />
+      </div>
       <div className='right-side'>
         <Link href='/sandbox'>
           <WidgetsRounded />
@@ -25,7 +28,11 @@ function NavBar({ className }) {
             <ViewInArRounded />
           </a>
         ) : null}
-        <UserAvatar user={userState} />
+        {!userLoading && userState?.username ?
+          <UserAvatar user={userState} />
+        : 
+          <SignInButton />
+        }
       </div>
     </header>
   );
